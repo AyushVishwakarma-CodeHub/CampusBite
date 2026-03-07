@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { ChefHat, Clock, ShoppingBag, Star, Zap, Shield } from 'lucide-react';
@@ -44,6 +44,14 @@ const Home = () => {
             setIsMuted(!isMuted);
         }
     };
+
+    useEffect(() => {
+        // Force play via JS to bypass strict browser autoplay policies
+        if (videoRef.current) {
+            videoRef.current.defaultMuted = true;
+            videoRef.current.play().catch(err => console.log("Autoplay blocked:", err));
+        }
+    }, []);
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -94,6 +102,7 @@ const Home = () => {
                     autoPlay
                     loop
                     muted={isMuted}
+                    defaultMuted
                     playsInline
                     className="hero-video"
                     style={{
