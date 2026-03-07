@@ -103,7 +103,8 @@ const Home = () => {
                         width: '100vw',
                         minHeight: '100%',
                         objectFit: 'cover',
-                        transform: 'translate(-50%, -50%)',
+                        transform: 'translate(-50%, -50%) scale(1.15)',
+                        transformOrigin: 'center center',
                         zIndex: 0,
                     }}
                 >
