@@ -264,7 +264,7 @@ This project is licensed under the **MIT License** - see the LICENSE file for de
 
 ## 📞 Support
 
-For support, email ayush@campusbite.com or open an issue on GitHub.
+For support, email ayushthesweetdabang@gmail.com or open an issue on GitHub.
 
 ---
 
