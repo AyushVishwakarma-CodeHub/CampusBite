@@ -48,16 +48,16 @@ const Home = () => {
     return (
         <div className="flex flex-col min-h-screen">
             {/* ──────────────── NAVBAR ──────────────── */}
-            <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-gray-100">
-                <div className="w-full px-6 md:px-12 max-w-[1600px] mx-auto flex justify-between items-center py-3">
+            <nav className="absolute top-0 left-0 w-full z-50 bg-transparent py-2">
+                <div className="container flex justify-between items-center py-3">
                     <Link to="/" className="text-2xl font-bold tracking-tight">
-                        <span style={{ color: 'var(--primary)' }}>Campus</span>
-                        <span style={{ color: 'var(--dark)' }}>Bite</span>
+                        <span style={{ color: '#FF5A5F' }}>Campus</span>
+                        <span className="text-white drop-shadow-sm">Bite</span>
                     </Link>
 
-                    <div className="flex gap-4 items-center">
+                    <div className="flex gap-5 items-center">
                         {user ? (
-                            <button className="btn btn-primary" onClick={() => {
+                            <button className="btn btn-primary shadow-lg shadow-primary/30" onClick={() => {
                                 if (user.role === 'student') navigate('/student/dashboard');
                                 else if (user.role === 'outlet') navigate('/outlet/dashboard');
                                 else navigate('/admin/dashboard');
@@ -66,8 +66,12 @@ const Home = () => {
                             </button>
                         ) : (
                             <>
-                                <Link to="/login" className="btn btn-outline">Login</Link>
-                                <Link to="/register" className="btn btn-primary">Get Started</Link>
+                                <Link to="/login" className="font-semibold text-white/90 hover:text-white transition-colors" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.4)' }}>
+                                    Login
+                                </Link>
+                                <Link to="/register" className="btn btn-primary shadow-lg shadow-primary/30 px-6 py-2">
+                                    Get Started
+                                </Link>
                             </>
                         )}
                     </div>
