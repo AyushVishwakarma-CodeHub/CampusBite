@@ -314,21 +314,21 @@ const Home = () => {
             <footer style={{ background: 'var(--dark)', color: 'rgba(255,255,255,0.7)', padding: '3rem 1rem', textAlign: 'center', fontSize: '0.9rem' }}>
                 <div className="container flex flex-col items-center gap-4">
                     <p style={{ fontWeight: 600, color: 'white', letterSpacing: '0.05em' }}>
-                        Created by Ayush Vishwakarma
+                        developed by Ayush raj
                     </p>
                     <div className="flex gap-4" style={{ marginBottom: '1rem' }}>
-                        <a href="https://linkedin.com/in/ayush-vishwakarma-a88ba825a" target="_blank" rel="noreferrer"
+                        <a href="https://www.linkedin.com/in/ayushraj2908" target="_blank" rel="noreferrer"
                             style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500, transition: 'color 0.2s' }}
                             onMouseOver={(e) => e.target.style.color = 'white'}
                             onMouseOut={(e) => e.target.style.color = 'var(--primary)'}>
                             LinkedIn
                         </a>
                         <span style={{ opacity: 0.3 }}>|</span>
-                        <a href="https://instagram.com/aayyuussss_h" target="_blank" rel="noreferrer"
+                        <a href="https://github.com/AyushVishwakarma-CodeHub/" target="_blank" rel="noreferrer"
                             style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500, transition: 'color 0.2s' }}
                             onMouseOver={(e) => e.target.style.color = 'white'}
                             onMouseOut={(e) => e.target.style.color = 'var(--primary)'}>
-                            Instagram
+                            GitHub
                         </a>
                     </div>
                     <p style={{ fontSize: '0.8rem', opacity: 0.5 }}>
