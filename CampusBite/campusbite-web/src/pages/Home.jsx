@@ -49,7 +49,7 @@ const Home = () => {
         <div className="flex flex-col min-h-screen">
             {/* ──────────────── NAVBAR ──────────────── */}
             <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-gray-100">
-                <div className="container flex justify-between items-center py-3">
+                <div className="w-full px-6 md:px-12 max-w-[1600px] mx-auto flex justify-between items-center py-3">
                     <Link to="/" className="text-2xl font-bold tracking-tight">
                         <span style={{ color: 'var(--primary)' }}>Campus</span>
                         <span style={{ color: 'var(--dark)' }}>Bite</span>
