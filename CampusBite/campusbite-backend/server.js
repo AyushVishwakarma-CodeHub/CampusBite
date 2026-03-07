@@ -25,14 +25,15 @@ app.use('/api/feedback', require('./routes/feedbackRoutes'));
 // Temporary admin route to update images
 const Outlet = require('./models/Outlet');
 app.get('/api/admin/update-images', async (req, res) => {
+    const BASE_URL = process.env.BACKEND_URL || 'http://localhost:8000';
     const IMAGE_MAP = {
-        'Campus Cafe': 'http://localhost:8000/public/images/campus_cafe.png',
-        'Kitchen Ette': 'http://localhost:8000/public/images/kitchen_ette.png',
-        'Oven Express': 'http://localhost:8000/public/images/oven_express.png',
-        'Campus Fusion': 'http://localhost:8000/public/images/campus_fusion.png',
-        'Bengali Bawarchi': 'http://localhost:8000/public/images/bengali_bawarchi.png',
-        'Yummy Meals': 'http://localhost:8000/public/images/yummy_meals.png',
-        'Punjabi Tadka': 'http://localhost:8000/public/images/punjabi_tadka.png'
+        'Campus Cafe': `${BASE_URL}/public/images/campus_cafe.png`,
+        'Kitchen Ette': `${BASE_URL}/public/images/kitchen_ette.png`,
+        'Oven Express': `${BASE_URL}/public/images/oven_express.png`,
+        'Campus Fusion': `${BASE_URL}/public/images/campus_fusion.png`,
+        'Bengali Bawarchi': `${BASE_URL}/public/images/bengali_bawarchi.png`,
+        'Yummy Meals': `${BASE_URL}/public/images/yummy_meals.png`,
+        'Punjabi Tadka': `${BASE_URL}/public/images/punjabi_tadka.jpg`
     };
     try {
         let results = [];

@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import Navbar from '../components/Navbar';
 import api from '../api';
-import { ShoppingCart, Plus, Minus, Info } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, Info, Clock } from 'lucide-react';
 
 const OutletMenu = () => {
     const { outletId } = useParams();

@@ -7,7 +7,7 @@ const Outlet = require('./models/Outlet');
         await mongoose.connect(process.env.MONGO_URI);
         const outlet = await Outlet.findOneAndUpdate(
             { name: 'Punjabi Tadka' },
-            { image: 'http://localhost:8000/public/images/punjabi_tadka.png' },
+            { image: 'http://localhost:8000/public/images/punjabi_tadka.jpg' },
             { new: true }
         );
         console.log('✅ Updated Punjabi Tadka image to .jpg');
