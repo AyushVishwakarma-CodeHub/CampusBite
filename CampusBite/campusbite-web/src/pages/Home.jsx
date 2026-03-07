@@ -88,8 +88,10 @@ const Home = () => {
                         filter: 'blur(4px)'
                     }}
                 >
-                    <source src="https://videos.pexels.com/video-files/3195394/3195394-hd_1280_720_25fps.mp4" type="video/mp4" />
-                    <source src="https://assets.mixkit.co/videos/preview/mixkit-friends-toasting-with-pizza-and-beer-40914-large.mp4" type="video/mp4" />
+                    {/* Students eating together on campus / cafeteria */}
+                    <source src="https://videos.pexels.com/video-files/8448135/8448135-hd_1280_720_25fps.mp4" type="video/mp4" />
+                    {/* Fallback: food being prepared */}
+                    <source src="https://videos.pexels.com/video-files/3209828/3209828-hd_1280_720_25fps.mp4" type="video/mp4" />
                 </video>
                 <div style={{
                     position: 'absolute',
