@@ -196,7 +196,7 @@ python app.py
    ```
 
 ### Access the Application
-- lIVE APPLICATION: https://campus-bite-seven.vercel.app/
+- LIVE APPLICATION: https://campus-bite-seven.vercel.app/
 ---
 
 ## 🔌 API Endpoints
