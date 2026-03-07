@@ -36,22 +36,14 @@ const Home = () => {
     const navigate = useNavigate();
 
     const [isMuted, setIsMuted] = useState(true);
-    const videoRef = useRef(null);
 
     const toggleMute = () => {
-        if (videoRef.current) {
-            videoRef.current.muted = !isMuted;
+        const videoElement = document.querySelector('.hero-video');
+        if (videoElement) {
+            videoElement.muted = !isMuted;
             setIsMuted(!isMuted);
         }
     };
-
-    useEffect(() => {
-        // Force play via JS to bypass strict browser autoplay policies
-        if (videoRef.current) {
-            videoRef.current.defaultMuted = true;
-            videoRef.current.play().catch(err => console.log("Autoplay blocked:", err));
-        }
-    }, []);
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -96,28 +88,32 @@ const Home = () => {
                 overflow: 'hidden',
                 padding: '5rem 1rem',
             }}>
-                {/* Background Video - Campus Cafeteria Queue */}
-                <video
-                    ref={videoRef}
-                    autoPlay
-                    loop
-                    muted={isMuted}
-                    defaultMuted
-                    playsInline
-                    className="hero-video"
-                    style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        width: '100vw',
-                        minHeight: '100%',
-                        objectFit: 'cover',
-                        transform: 'translate(-50%, -50%)',
-                        zIndex: 0,
+                {/* Background Video - Campus Cafeteria Queue (Forced Autoplay via HTML string) */}
+                <div
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                        <video
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            class="hero-video"
+                            style="
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                width: 100vw;
+                                min-height: 100%;
+                                object-fit: cover;
+                                transform: translate(-50%, -50%);
+                                z-index: 0;
+                            "
+                        >
+                            <source src="/campus-food-queue.mp4" type="video/mp4" />
+                        </video>
+                        `
                     }}
-                >
-                    <source src="/campus-food-queue.mp4" type="video/mp4" />
-                </video>
+                />
 
                 {/* Dark cinematic gradient overlay (like Zomato) */}
                 <div style={{
