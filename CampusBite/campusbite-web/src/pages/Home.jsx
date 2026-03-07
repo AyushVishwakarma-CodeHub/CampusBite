@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { ChefHat, Clock, ShoppingBag, Star, Zap, Shield } from 'lucide-react';
@@ -35,15 +35,27 @@ const Home = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
 
+    const [isMuted, setIsMuted] = useState(true);
+    const videoRef = useRef(null);
+
+    const toggleMute = () => {
+        if (videoRef.current) {
+            videoRef.current.muted = !isMuted;
+            setIsMuted(!isMuted);
+        }
+    };
+
     return (
-        <div>
+        <div className="flex flex-col min-h-screen">
             {/* ──────────────── NAVBAR ──────────────── */}
-            <nav className="glass" style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid var(--border)' }}>
-                <div className="container flex justify-between items-center" style={{ height: '70px' }}>
-                    <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--primary)' }}>
-                        Campus<span style={{ color: 'var(--dark)' }}>Bite</span>
-                    </span>
-                    <div className="flex gap-3">
+            <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-gray-100">
+                <div className="container flex justify-between items-center py-3">
+                    <Link to="/" className="text-2xl font-bold tracking-tight">
+                        <span style={{ color: 'var(--primary)' }}>Campus</span>
+                        <span style={{ color: 'var(--dark)' }}>Bite</span>
+                    </Link>
+
+                    <div className="flex gap-4 items-center">
                         {user ? (
                             <button className="btn btn-primary" onClick={() => {
                                 if (user.role === 'student') navigate('/student/dashboard');
@@ -74,9 +86,10 @@ const Home = () => {
             }}>
                 {/* Background Video - Campus Cafeteria Queue */}
                 <video
+                    ref={videoRef}
                     autoPlay
                     loop
-                    muted
+                    muted={isMuted}
                     playsInline
                     className="hero-video"
                     style={{
@@ -100,6 +113,33 @@ const Home = () => {
                     background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.70) 60%, rgba(0,0,0,0.85) 100%)',
                     zIndex: 1
                 }}></div>
+
+                {/* Unmute Button */}
+                <button
+                    onClick={toggleMute}
+                    style={{
+                        position: 'absolute',
+                        bottom: '2rem',
+                        right: '2rem',
+                        zIndex: 3,
+                        background: 'rgba(255,255,255,0.15)',
+                        border: '1px solid rgba(255,255,255,0.4)',
+                        color: 'white',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '999px',
+                        backdropFilter: 'blur(8px)',
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        transition: 'background 0.2s',
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
+                    onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
+                >
+                    {isMuted ? '🔇 Unmute Video' : '🔊 Mute Video'}
+                </button>
 
                 {/* Hero Content */}
                 <div style={{
