@@ -78,6 +78,7 @@ const Home = () => {
                     loop
                     muted
                     playsInline
+                    className="hero-video"
                     style={{
                         position: 'absolute',
                         top: '50%',
@@ -89,10 +90,7 @@ const Home = () => {
                         zIndex: 0,
                     }}
                 >
-                    {/* Students in cafeteria / campus food scene */}
-                    <source src="https://videos.pexels.com/video-files/5064601/5064601-hd_1280_720_25fps.mp4" type="video/mp4" />
-                    <source src="https://videos.pexels.com/video-files/4769442/4769442-hd_1280_720_25fps.mp4" type="video/mp4" />
-                    <source src="https://videos.pexels.com/video-files/3209828/3209828-hd_1280_720_25fps.mp4" type="video/mp4" />
+                    <source src="/campus-food-queue.mp4" type="video/mp4" />
                 </video>
 
                 {/* Dark cinematic gradient overlay (like Zomato) */}
@@ -154,7 +152,7 @@ const Home = () => {
                         lineHeight: 1.8,
                         textShadow: '0 1px 8px rgba(0,0,0,0.4)',
                     }}>
-                        No more standing in long cafeteria queues. Pre-order your campus meals, pick a time slot, and walk straight to collect your food.
+                        No more standing in long cafeteria lines. Pre-order your campus meals, choose a pickup time slot, and collect your food instantly.
                     </p>
 
                     <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
