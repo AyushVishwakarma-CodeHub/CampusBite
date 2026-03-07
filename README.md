@@ -196,10 +196,7 @@ python app.py
    ```
 
 ### Access the Application
-- **Frontend:** http://localhost:5173
-- **Backend API:** http://localhost:5000/api
-- **AI Service:** http://localhost:5001
-
+- lIVE APPLICATION: https://campus-bite-seven.vercel.app/
 ---
 
 ## 🔌 API Endpoints
