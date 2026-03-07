@@ -65,12 +65,14 @@ const Home = () => {
             {/* ──────────────── HERO ──────────────── */}
             <section style={{
                 position: 'relative',
-                minHeight: '90vh',
+                minHeight: '100vh',
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 overflow: 'hidden',
                 padding: '5rem 1rem',
             }}>
+                {/* Background Video - Campus Cafeteria Queue */}
                 <video
                     autoPlay
                     loop
@@ -84,39 +86,106 @@ const Home = () => {
                         minHeight: '100%',
                         objectFit: 'cover',
                         transform: 'translate(-50%, -50%)',
-                        zIndex: -2,
-                        filter: 'blur(4px)'
+                        zIndex: 0,
                     }}
                 >
-                    {/* Students eating together on campus / cafeteria */}
-                    <source src="https://videos.pexels.com/video-files/8448135/8448135-hd_1280_720_25fps.mp4" type="video/mp4" />
-                    {/* Fallback: food being prepared */}
+                    {/* Students in cafeteria / campus food scene */}
+                    <source src="https://videos.pexels.com/video-files/5064601/5064601-hd_1280_720_25fps.mp4" type="video/mp4" />
+                    <source src="https://videos.pexels.com/video-files/4769442/4769442-hd_1280_720_25fps.mp4" type="video/mp4" />
                     <source src="https://videos.pexels.com/video-files/3209828/3209828-hd_1280_720_25fps.mp4" type="video/mp4" />
                 </video>
+
+                {/* Dark cinematic gradient overlay (like Zomato) */}
                 <div style={{
                     position: 'absolute',
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    background: 'rgba(255, 255, 255, 0.75)',
-                    zIndex: -1
+                    inset: 0,
+                    background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.70) 60%, rgba(0,0,0,0.85) 100%)',
+                    zIndex: 1
                 }}></div>
-                <div className="container text-center" style={{ maxWidth: '760px', margin: '0 auto' }}>
-                    <div className="badge badge-primary" style={{ marginBottom: '1.5rem', fontSize: '0.8rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+
+                {/* Hero Content */}
+                <div style={{
+                    position: 'relative',
+                    zIndex: 2,
+                    textAlign: 'center',
+                    maxWidth: '820px',
+                    margin: '0 auto',
+                }}>
+                    <div style={{
+                        display: 'inline-block',
+                        background: 'rgba(255,90,95,0.2)',
+                        border: '1px solid rgba(255,90,95,0.6)',
+                        color: '#ff7a7e',
+                        borderRadius: '999px',
+                        padding: '0.35rem 1.1rem',
+                        fontSize: '0.78rem',
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                        fontWeight: 600,
+                        marginBottom: '1.8rem',
+                    }}>
                         🎓 Designed for Campus Life
                     </div>
-                    <h1 className="heading-1" style={{ marginBottom: '1.5rem', lineHeight: 1.15 }}>
-                        Campus Food Ordering,{' '}
-                        <span style={{ background: 'linear-gradient(135deg, var(--primary), var(--secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                            Reinvented
+
+                    <h1 style={{
+                        fontSize: 'clamp(2.2rem, 5vw, 4rem)',
+                        fontWeight: 800,
+                        color: '#ffffff',
+                        lineHeight: 1.15,
+                        marginBottom: '1.2rem',
+                        textShadow: '0 2px 20px rgba(0,0,0,0.5)',
+                    }}>
+                        Skip the Queue.<br />
+                        <span style={{
+                            background: 'linear-gradient(135deg, #FF5A5F, #00A699)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            backgroundClip: 'text',
+                        }}>
+                            Order Smarter.
                         </span>
                     </h1>
-                    <p className="text-muted text-lg" style={{ maxWidth: '560px', margin: '0 auto 2.5rem', lineHeight: 1.8 }}>
-                        Pre-order your meals, choose your time slot, and collect your food without waiting. Powered by AI for zero food waste.
+
+                    <p style={{
+                        color: 'rgba(255,255,255,0.82)',
+                        fontSize: '1.15rem',
+                        maxWidth: '560px',
+                        margin: '0 auto 2.8rem',
+                        lineHeight: 1.8,
+                        textShadow: '0 1px 8px rgba(0,0,0,0.4)',
+                    }}>
+                        No more standing in long cafeteria queues. Pre-order your campus meals, pick a time slot, and walk straight to collect your food.
                     </p>
-                    <div className="flex justify-center gap-4 flex-wrap">
-                        <Link to="/register" className="btn btn-primary" style={{ fontSize: '1.05rem', padding: '0.85rem 2.2rem' }}>
+
+                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <Link to="/register" style={{
+                            background: 'linear-gradient(135deg, #FF5A5F, #e04045)',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '0.9rem 2.4rem',
+                            fontSize: '1.05rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            textDecoration: 'none',
+                            boxShadow: '0 4px 20px rgba(255,90,95,0.4)',
+                            transition: 'transform 0.2s',
+                        }}>
                             Order Now — It's Free
                         </Link>
-                        <Link to="/login" className="btn btn-outline" style={{ fontSize: '1.05rem', padding: '0.85rem 2.2rem' }}>
+                        <Link to="/login" style={{
+                            background: 'rgba(255,255,255,0.15)',
+                            color: '#fff',
+                            border: '1px solid rgba(255,255,255,0.4)',
+                            borderRadius: '8px',
+                            padding: '0.9rem 2.4rem',
+                            fontSize: '1.05rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            textDecoration: 'none',
+                            backdropFilter: 'blur(8px)',
+                            transition: 'transform 0.2s',
+                        }}>
                             Sign In
                         </Link>
                     </div>
