@@ -64,12 +64,38 @@ const Home = () => {
 
             {/* ──────────────── HERO ──────────────── */}
             <section style={{
+                position: 'relative',
                 minHeight: '90vh',
                 display: 'flex',
                 alignItems: 'center',
-                background: 'radial-gradient(ellipse 80% 80% at 50% -20%, rgba(255,90,95,0.15), transparent), radial-gradient(ellipse 60% 60% at 80% 100%, rgba(0,166,153,0.12), transparent), var(--light)',
+                overflow: 'hidden',
                 padding: '5rem 1rem',
             }}>
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        width: '100vw',
+                        minHeight: '100%',
+                        objectFit: 'cover',
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: -2,
+                        filter: 'blur(4px)'
+                    }}
+                >
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-friends-toasting-with-pizza-and-beer-40914-large.mp4" type="video/mp4" />
+                </video>
+                <div style={{
+                    position: 'absolute',
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    background: 'rgba(255, 255, 255, 0.75)',
+                    zIndex: -1
+                }}></div>
                 <div className="container text-center" style={{ maxWidth: '760px', margin: '0 auto' }}>
                     <div className="badge badge-primary" style={{ marginBottom: '1.5rem', fontSize: '0.8rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                         🎓 Designed for Campus Life
