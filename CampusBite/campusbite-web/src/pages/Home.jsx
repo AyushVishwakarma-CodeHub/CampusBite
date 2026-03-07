@@ -311,8 +311,30 @@ const Home = () => {
             </section>
 
             {/* ──────────────── FOOTER ──────────────── */}
-            <footer style={{ background: 'var(--dark)', color: 'rgba(255,255,255,0.5)', padding: '2rem 1rem', textAlign: 'center', fontSize: '0.875rem' }}>
-                © 2025 CampusBite · AI-Powered Smart Campus Food Ordering
+            <footer style={{ background: 'var(--dark)', color: 'rgba(255,255,255,0.7)', padding: '3rem 1rem', textAlign: 'center', fontSize: '0.9rem' }}>
+                <div className="container flex flex-col items-center gap-4">
+                    <p style={{ fontWeight: 600, color: 'white', letterSpacing: '0.05em' }}>
+                        Created by Ayush Vishwakarma
+                    </p>
+                    <div className="flex gap-4" style={{ marginBottom: '1rem' }}>
+                        <a href="https://linkedin.com/in/ayush-vishwakarma-a88ba825a" target="_blank" rel="noreferrer"
+                            style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500, transition: 'color 0.2s' }}
+                            onMouseOver={(e) => e.target.style.color = 'white'}
+                            onMouseOut={(e) => e.target.style.color = 'var(--primary)'}>
+                            LinkedIn
+                        </a>
+                        <span style={{ opacity: 0.3 }}>|</span>
+                        <a href="https://instagram.com/aayyuussss_h" target="_blank" rel="noreferrer"
+                            style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500, transition: 'color 0.2s' }}
+                            onMouseOver={(e) => e.target.style.color = 'white'}
+                            onMouseOut={(e) => e.target.style.color = 'var(--primary)'}>
+                            Instagram
+                        </a>
+                    </div>
+                    <p style={{ fontSize: '0.8rem', opacity: 0.5 }}>
+                        © {new Date().getFullYear()} CampusBite · AI-Powered Smart Campus Food Ordering
+                    </p>
+                </div>
             </footer>
         </div>
     );
