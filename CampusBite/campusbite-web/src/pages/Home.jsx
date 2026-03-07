@@ -314,7 +314,7 @@ const Home = () => {
             <footer style={{ background: 'var(--dark)', color: 'rgba(255,255,255,0.7)', padding: '3rem 1rem', textAlign: 'center', fontSize: '0.9rem' }}>
                 <div className="container flex flex-col items-center gap-4">
                     <p style={{ fontWeight: 600, color: 'white', letterSpacing: '0.05em' }}>
-                        developed by Ayush raj
+                        Developed by <span style={{ color: 'var(--primary)' }}>Ayush Raj</span>
                     </p>
                     <div className="flex gap-4" style={{ marginBottom: '1rem' }}>
                         <a href="https://www.linkedin.com/in/ayushraj2908" target="_blank" rel="noreferrer"
@@ -329,6 +329,13 @@ const Home = () => {
                             onMouseOver={(e) => e.target.style.color = 'white'}
                             onMouseOut={(e) => e.target.style.color = 'var(--primary)'}>
                             GitHub
+                        </a>
+                        <span style={{ opacity: 0.3 }}>|</span>
+                        <a href="mailto:ayushthesweetdabang@gmail.com"
+                            style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500, transition: 'color 0.2s' }}
+                            onMouseOver={(e) => e.target.style.color = 'white'}
+                            onMouseOut={(e) => e.target.style.color = 'var(--primary)'}>
+                            Contact
                         </a>
                     </div>
                     <p style={{ fontSize: '0.8rem', opacity: 0.5 }}>
