@@ -1,268 +1,111 @@
-# 🍕 CampusBite
+<div align="center">
+  <img src="https://campusbitelive.vercel.app/public/images/campus_cafe.png" alt="CampusBite Logo" width="120" style="border-radius: 20px;"/>
+  <h1>CampusBite 🍔🎓</h1>
+  <p><strong>Skip the Queue. Order Smarter.</strong></p>
+  <p>A smart, real-time food ordering and centralized queue management ecosystem built exclusively for university campuses.</p>
 
-> A comprehensive campus food ordering platform connecting students with on-campus outlets
+  <div>
+    <a href="https://campusbitelive.vercel.app"><img src="https://img.shields.io/badge/Live_Website-Available_Now-FF5A5F?style=for-the-badge&logo=vercel" alt="Live Demo" /></a>
+  </div>
+</div>
 
-[![GitHub](https://img.shields.io/badge/GitHub-CampusBite-blue?logo=github)](https://github.com/AyushVishwakarma-CodeHub/CampusBite)
-[![Node.js](https://img.shields.io/badge/Node.js-v14%2B-green?logo=node.js)](https://nodejs.org/)
-[![React](https://img.shields.io/badge/React-v18%2B-blue?logo=react)](https://reactjs.org/)
-[![Python](https://img.shields.io/badge/Python-v3.8%2B-blue?logo=python)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+<br />
 
----
-
-## 📋 Table of Contents
-
-- [About](#about)
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Contributing](#-contributing)
-- [License](#-license)
+## 🚀 Live Demo
+**Frontend:** https://campusbitelive.vercel.app <br/>
+**Backend API:** https://campusbite-backend-yr0u.onrender.com (Hosted on Render)
 
 ---
 
-## 📖 About
+## 🎯 The Problem it Solves
+University food courts are chaotic during lunch hours. Students waste precious break time standing in long, disorganized queues. **CampusBite** completely digitizes the campus food experience by allowing students to order ahead, pick a designated time-slot, and skip the physical queue entirely. 
 
-**CampusBite** is a full-stack web application designed to simplify food ordering on campus. It connects hungry students with various food outlets, enabling seamless browsing, ordering, and delivery services. The platform includes an advanced AI prediction system to help outlets manage inventory efficiently.
-
----
-
-## ✨ Features
-
-### 👨‍🎓 For Students
-- 🔐 Secure user authentication and registration
-- 🏪 Browse multiple food outlets and menus
-- 🛒 Add items to cart and manage orders
-- 📦 Track order status in real-time
-- ⭐ Rate and review outlets
-- 📱 Responsive mobile-friendly interface
-
-### 🏬 For Outlet Owners
-- 📊 Intuitive dashboard for outlet management
-- 🍽️ Manage menu items with images and prices
-- 📈 View real-time orders and analytics
-- 💳 Admin controls for outlet operations
-- 📊 AI-powered demand prediction system
-
-### 👨‍💼 For Administrators
-- 🛡️ Full platform administration
-- 📋 Manage all outlets and users
-- 📊 System-wide analytics and reports
-- 🔧 Platform maintenance and settings
+## ✨ Key Features
+- 🧑‍🎓 **Student Ordering App:** Browse campus food outlets, add meals to cart, choose Takeaway vs. Delivery (to a specific hostel room), and receive digital token slots.
+- 🏪 **Outlet Management Dashboard:** Real-time digital kitchen queue. Outlets can independently disable out-of-stock items, process incoming orders by time-slot, and update live order statuses (Pending ➜ Preparing ➜ Ready).
+- 🔑 **Multi-Role Authentication:** Dedicated dashboards dynamically assigned using JWT security for Students, Outlet Owners, and the Campus Administrator. 
+- 📈 **Admin Analytics:** Global oversight dashboard for university management to track total orders, revenue, and active outlets.
+- 🤖 **AI Demand Forecasting (Python/Scikit-Learn):** Machine learning module designed to predict food demand based on daily historical order trends to drastically reduce food waste.
 
 ---
 
-## 🛠️ Tech Stack
+## 💻 Tech Stack
+The project follows a modern MERN-like stack with Vanilla CSS for a bespoke, premium UI.
 
-### Frontend
-- **Framework:** React 18+
-- **Build Tool:** Vite
-- **Styling:** CSS3
-- **State Management:** Context API
-- **HTTP Client:** Axios
+**Frontend ⚡**
+- React.js + Vite
+- React Router DOM
+- Axios
+- Lucide React (Icons)
+- Pure Vanilla CSS (Glassmorphism & Cinematic Design)
 
-### Backend
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **Database:** MongoDB
-- **ORM:** Mongoose
-- **Authentication:** JWT
-- **API:** RESTful
+**Backend ⚙️**
+- Node.js & Express.js
+- MongoDB (Mongoose ORM)
+- JSON Web Tokens (JWT Auth)
+- Bcrypt.js (Password Hashing)
 
-### AI/ML
-- **Language:** Python 3.8+
-- **Purpose:** Demand prediction and inventory management
-- **Libraries:** TensorFlow, Scikit-learn, Pandas
-
----
-
-## 📁 Project Structure
-
-```
-CampusBite/
-├── campusbite-web/              # Frontend (React + Vite)
-│   ├── src/
-│   │   ├── components/          # Reusable UI components
-│   │   ├── pages/               # Page components
-│   │   ├── context/             # Context API (Auth, Cart)
-│   │   ├── api/                 # API integration
-│   │   └── utils/               # Utility functions
-│   ├── package.json
-│   └── vite.config.js
-│
-├── campusbite-backend/          # Backend (Express + MongoDB)
-│   ├── config/                  # Database configuration
-│   ├── controllers/             # Business logic
-│   ├── models/                  # Database schemas
-│   ├── routes/                  # API endpoints
-│   ├── middleware/              # Auth & custom middleware
-│   ├── public/                  # Static files & images
-│   ├── server.js                # Entry point
-│   └── package.json
-│
-└── campusbite-ai/               # AI Module (Python)
-    └── app.py                   # ML prediction engine
-```
+**Machine Learning 🧠**
+- Python 3
+- Pandas & Scikit-learn
+- Flask (Microservice to Node.js)
 
 ---
 
-## 🚀 Installation
+## 🛠️ Local Installation & Setup
 
 ### Prerequisites
-- **Node.js** v14 or higher
-- **Python** 3.8 or higher
-- **MongoDB** (local or Atlas)
-- **npm** or **yarn**
+Make sure you have Node.js and MongoDB installed on your local machine.
 
-### Backend Setup
+### 1. Clone the Repository
+```bash
+git clone https://github.com/AyushVishwakarma-CodeHub/CampusBite.git
+cd CampusBite
+```
 
+### 2. Backend Setup
 ```bash
 cd campusbite-backend
 
 # Install dependencies
 npm install
 
-# Configure environment variables
-# Create a .env file with your MongoDB connection string
-# MONGODB_URI=your_mongodb_connection_string
+# Create a .env file and configure the following variables:
+# MONGO_URI=your_mongodb_connection_string
+# JWT_SECRET=your_super_secret_key
 # PORT=5000
+# FRONTEND_URL=http://localhost:5173
 
-# Seed database (optional)
-npm run seed
+# Optional: Run the seed script to generate dummy outlets and menu items
+node seed.js
 
-# Start server
-npm start
+# Start the server on localhost:5000
+npm run dev
 ```
 
-### Frontend Setup
-
+### 3. Frontend Setup
 ```bash
 cd campusbite-web
 
 # Install dependencies
 npm install
 
-# Create .env file with API URL
+# Create a .env file
 # VITE_API_URL=http://localhost:5000/api
 
-# Start development server
+# Start the React Vite dev server
 npm run dev
 ```
 
-### AI Module Setup
-
-```bash
-cd campusbite-ai
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# Windows
-venv\Scripts\activate
-# macOS/Linux
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run prediction service
-python app.py
-```
-
 ---
 
-## 💻 Usage
-
-### Starting the Application
-
-1. **Start MongoDB** (if using local instance)
-2. **Start Backend:**
-   ```bash
-   cd campusbite-backend
-   npm start
-   ```
-3. **Start Frontend:**
-   ```bash
-   cd campusbite-web
-   npm run dev
-   ```
-4. **Start AI Module** (optional, for predictions):
-   ```bash
-   cd campusbite-ai
-   python app.py
-   ```
-
-### Access the Application
-- LIVE APPLICATION: https://campus-bite-seven.vercel.app/
----
-
-## 🔌 API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `POST /api/auth/logout` - Logout user
-
-### Outlets
-- `GET /api/outlets` - Get all outlets
-- `GET /api/outlets/:id` - Get outlet details
-- `POST /api/outlets` - Create outlet (admin)
-- `PUT /api/outlets/:id` - Update outlet
-
-### Menu
-- `GET /api/menu/:outletId` - Get menu items
-- `POST /api/menu` - Add menu item
-- `PUT /api/menu/:id` - Update menu item
-- `DELETE /api/menu/:id` - Delete menu item
-
-### Orders
-- `POST /api/orders` - Create order
-- `GET /api/orders/:userId` - Get user orders
-- `GET /api/orders` - Get all orders (admin)
-- `PUT /api/orders/:id` - Update order status
+## 🧑‍💻 Developer
+**Ayush Raj**
+- **Email:** ayushthesweetdabang@gmail.com
+- **LinkedIn:** [Ayush Raj (ayushraj2908)](https://www.linkedin.com/in/ayushraj2908)
+- **GitHub:** [AyushVishwakarma-CodeHub](https://github.com/AyushVishwakarma-CodeHub/)
 
 ---
-
-## 🤝 Contributing
-
-Contributions are welcome! Here's how to contribute:
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
-5. **Open** a Pull Request
-
----
-
-## 📝 License
-
-This project is licensed under the **MIT License** - see the LICENSE file for details.
-
----
-
-## 👨‍💻 Author
-
-**Ayush Vishwakarma**
-- GitHub: [@AyushVishwakarma-CodeHub](https://github.com/AyushVishwakarma-CodeHub)
-
----
-
-## 🙏 Acknowledgments
-
-- Campus community for feedback and support
-- Open-source libraries and frameworks used
-- Contributors and testers
-
----
-
-## 📞 Support
-
-For support, email ayushthesweetdabang@gmail.com or open an issue on GitHub.
-
----
-
-**Made with ❤️ by the CampusBite Team**
+<div align="center">
+  <i>Developed with ❤️ for better campus life.</i>
+</div>
