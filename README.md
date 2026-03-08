@@ -1,8 +1,9 @@
 <div align="center">
   <img src="https://campusbitelive.vercel.app/public/images/campus_cafe.png" alt="CampusBite Logo" width="120" style="border-radius: 20px;"/>
-  <h1>CampusBite 🍔🎓</h1>
+  
+  # CampusBite – Smart Campus Food Ordering System
+  
   <p><strong>Skip the Queue. Order Smarter.</strong></p>
-  <p>A smart, real-time food ordering and centralized queue management ecosystem built exclusively for university campuses.</p>
 
   <div>
     <a href="https://campusbitelive.vercel.app"><img src="https://img.shields.io/badge/Live_Website-Available_Now-FF5A5F?style=for-the-badge&logo=vercel" alt="Live Demo" /></a>
@@ -11,54 +12,131 @@
 
 <br />
 
-## 🚀 Live Demo
-**Frontend:** https://campusbitelive.vercel.app <br/>
-**Backend API:** https://campusbite-backend-yr0u.onrender.com (Hosted on Render)
+## 1. Project Title
+**CampusBite – Smart Campus Food Ordering System**
 
 ---
 
-## 🎯 The Problem it Solves
-University food courts are chaotic during lunch hours. Students waste precious break time standing in long, disorganized queues. **CampusBite** completely digitizes the campus food experience by allowing students to order ahead, pick a designated time-slot, and skip the physical queue entirely. 
-
-## ✨ Key Features
-- 🧑‍🎓 **Student Ordering App:** Browse campus food outlets, add meals to cart, choose Takeaway vs. Delivery (to a specific hostel room), and receive digital token slots.
-- 🏪 **Outlet Management Dashboard:** Real-time digital kitchen queue. Outlets can independently disable out-of-stock items, process incoming orders by time-slot, and update live order statuses (Pending ➜ Preparing ➜ Ready).
-- 🔑 **Multi-Role Authentication:** Dedicated dashboards dynamically assigned using JWT security for Students, Outlet Owners, and the Campus Administrator. 
-- 📈 **Admin Analytics:** Global oversight dashboard for university management to track total orders, revenue, and active outlets.
-- 🤖 **AI Demand Forecasting (Python/Scikit-Learn):** Machine learning module designed to predict food demand based on daily historical order trends to drastically reduce food waste.
+## 2. Project Description
+CampusBite is a comprehensive web application designed exclusively for university campuses where students often face long queues at food outlets during short lunch breaks. The platform allows students to pre-order meals, choose pickup time slots, and collect food using a digital token system, significantly reducing waiting time and crowd congestion.
 
 ---
 
-## 💻 Tech Stack
-The project follows a modern MERN-like stack with Vanilla CSS for a bespoke, premium UI.
+## 3. Problem Statement
+University food courts are chaotic during peak hours. The real problems include:
+* **Long queues** at campus food courts.
+* **Students wasting their lunch break** waiting for food instead of relaxing or studying.
+* **Uncertainty** about food availability by the time they reach the front of the line.
 
-**Frontend ⚡**
-- React.js + Vite
-- React Router DOM
-- Axios
-- Lucide React (Icons)
-- Pure Vanilla CSS (Glassmorphism & Cinematic Design)
+---
 
-**Backend ⚙️**
-- Node.js & Express.js
-- MongoDB (Mongoose ORM)
-- JSON Web Tokens (JWT Auth)
-- Bcrypt.js (Password Hashing)
+## 4. Solution
+CampusBite solves these campus dining issues by introducing:
+* **Pre-order meals:** Order food from anywhere on campus.
+* **Select pickup time slots:** Choose a specific time window to collect the meal.
+* **Digital token system:** Receive a unique secure token to verify order pickup.
+* **Faster food pickup:** Skip the physical line entirely and grab food instantly when ready.
 
-**Machine Learning 🧠**
-- Python 3
-- Pandas & Scikit-learn
-- Flask (Microservice to Node.js)
+---
 
+## 5. Key Features
+* 🍔 Browse campus food outlets
+* 📸 View menus with images and prices
+* 🛒 Add items to cart
+* 📅 Pre-book meals 
+* ⏱️ Select pickup time slots
+* 📍 Order tracking
+* 🎫 Digital token system
+* 🔐 User authentication
+* ⭐ Feedback and ratings
 
+---
 
-## 🧑‍💻 Developer
+## 6. Technology Stack
+**Frontend:**
+* React.js + Vite
+
+**Backend:**
+* Node.js + Express
+
+**Database:**
+* MongoDB Atlas
+
+**Other:**
+* JWT authentication
+* REST APIs
+
+---
+
+## 7. Project Structure
+```text
+CampusBite/
+├── campusbite-web/       # React.js Frontend Application
+├── campusbite-backend/   # Node.js + Express Backend Server
+└── campusbite-ai/        # Python AI / ML Module
+```
+
+---
+
+## 8. Installation and Setup
+Steps to run locally:
+
+**1. Clone the repository**
+```bash
+git clone https://github.com/AyushVishwakarma-CodeHub/CampusBite.git
+cd CampusBite
+```
+
+**2. Install dependencies & Run backend server**
+```bash
+cd campusbite-backend
+npm install
+
+# Create a .env file with MONGO_URI, JWT_SECRET, PORT=5000
+npm run dev
+```
+
+**3. Install dependencies & Run frontend development server**
+```bash
+cd campusbite-web
+npm install
+
+# Create a .env file with VITE_API_URL=http://localhost:5000/api
+npm run dev
+```
+
+---
+
+## 9. Screenshots
+
+*(Screenshots coming soon)*
+
+### Landing Page
+<!-- Add landing page screenshot here -->
+
+### Menu Page
+<!-- Add menu page screenshot here -->
+
+### Order System
+<!-- Add order system screenshot here -->
+
+### Dashboard
+<!-- Add dashboard screenshot here -->
+
+---
+
+## 10. Future Improvements
+* 🤖 **AI demand prediction:** Implement machine learning to predict daily food demand.
+* 🚴 **Campus delivery integration:** Peer-to-peer student delivery to hostel rooms.
+* 📱 **Mobile app version:** React Native application for iOS and Android.
+
+---
+
+## 11. Author
+Developed by:
 **Ayush Raj**
-- **Email:** ayushthesweetdabang@gmail.com
-- **LinkedIn:** [Ayush Raj (ayushraj2908)](https://www.linkedin.com/in/ayushraj2908)
-- **GitHub:** [AyushVishwakarma-CodeHub](https://github.com/AyushVishwakarma-CodeHub/)
 
 ---
-<div align="center">
-  <i>Developed with ❤️ for better campus life.</i>
-</div>
+
+## 12. License
+Distributed under the MIT License. See `LICENSE` for more information.
