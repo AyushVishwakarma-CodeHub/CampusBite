@@ -50,54 +50,7 @@ The project follows a modern MERN-like stack with Vanilla CSS for a bespoke, pre
 - Pandas & Scikit-learn
 - Flask (Microservice to Node.js)
 
----
 
-## 🛠️ Local Installation & Setup
-
-### Prerequisites
-Make sure you have Node.js and MongoDB installed on your local machine.
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/AyushVishwakarma-CodeHub/CampusBite.git
-cd CampusBite
-```
-
-### 2. Backend Setup
-```bash
-cd campusbite-backend
-
-# Install dependencies
-npm install
-
-# Create a .env file and configure the following variables:
-# MONGO_URI=your_mongodb_connection_string
-# JWT_SECRET=your_super_secret_key
-# PORT=5000
-# FRONTEND_URL=http://localhost:5173
-
-# Optional: Run the seed script to generate dummy outlets and menu items
-node seed.js
-
-# Start the server on localhost:5000
-npm run dev
-```
-
-### 3. Frontend Setup
-```bash
-cd campusbite-web
-
-# Install dependencies
-npm install
-
-# Create a .env file
-# VITE_API_URL=http://localhost:5000/api
-
-# Start the React Vite dev server
-npm run dev
-```
-
----
 
 ## 🧑‍💻 Developer
 **Ayush Raj**
