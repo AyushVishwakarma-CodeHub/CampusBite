@@ -28,6 +28,12 @@ Instead of standing in line, students can browse menus, pre-order their meals, a
 
 ---
 
+## 🚀 Live Links
+- **Frontend App:** [https://campusbitelive.vercel.app](https://campusbitelive.vercel.app)
+- **Backend API:** [https://campusbite-backend-yr0u.onrender.com](https://campusbite-backend-yr0u.onrender.com) 
+
+---
+
 ## ✨ Core Features
 
 ### 🧑‍🎓 For Students
