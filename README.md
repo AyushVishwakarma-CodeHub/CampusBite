@@ -97,9 +97,24 @@ Visit `http://localhost:5173` in your browser.
 
 ```text
 CampusBite/
-├── campusbite-web/       # React.js SPA (Student, Outlet, Admin Views)
-├── campusbite-backend/   # Express API, MongoDB Models, JWT Auth
-└── campusbite-ai/        # Python forecasting scripts
+├── campusbite-web/             # React.js Frontend
+│   ├── public/                 # Static assets (images, video)
+│   └── src/
+│       ├── components/         # Reusable UI components (Navbar, Sidebar)
+│       ├── context/            # React Context (AuthContext, CartContext)
+│       ├── pages/              # Views (Home, Login, Dashboards)
+│       └── index.css           # Vanilla CSS styles and glassmorphism
+│
+├── campusbite-backend/         # Node.js + Express Backend
+│   ├── config/                 # Database connection (MongoDB)
+│   ├── controllers/            # Route logic (Auth, Order, Menu)
+│   ├── middleware/             # JWT authentication checks
+│   ├── models/                 # Mongoose schemas (User, Outlet, Order)
+│   └── routes/                 # Express API endpoints
+│
+└── campusbite-ai/              # Python Forecasting
+    ├── models/                 # Pre-trained scikit-learn (.pkl) models
+    └── app.py                  # Flask microservice
 ```
 
 ---
