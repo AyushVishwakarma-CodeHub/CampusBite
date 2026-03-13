@@ -114,7 +114,9 @@ const forgotPassword = async (req, res) => {
 
         try {
             const transporter = nodemailer.createTransport({
-                service: 'gmail',
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true,
                 auth: {
                     user: process.env.EMAIL_USER,
                     pass: process.env.EMAIL_PASS,
@@ -135,7 +137,7 @@ const forgotPassword = async (req, res) => {
             await user.save();
 
             console.error('Email send error:', error);
-            return res.status(500).json({ message: 'Email could not be sent' });
+            return res.status(500).json({ message: 'Email could not be sent. Render configuration error.', error: error.message });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
