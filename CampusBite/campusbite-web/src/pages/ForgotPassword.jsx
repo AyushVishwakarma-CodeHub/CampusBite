@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Link } from 'react-router-dom';
-
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
@@ -15,7 +14,7 @@ const ForgotPassword = () => {
         setLoading(true);
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, { email });
+            const res = await api.post('/auth/forgot-password', { email });
             setMessage(res.data.message || 'If an account exists, a reset link has been sent to your email.');
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to process request. Please try again later.');

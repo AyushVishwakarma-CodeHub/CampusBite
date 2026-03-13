@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 
 const ResetPassword = () => {
@@ -31,7 +31,7 @@ const ResetPassword = () => {
         setLoading(true);
 
         try {
-            const res = await axios.put(`${import.meta.env.VITE_API_URL}/auth/reset-password/${token}`, { password });
+            const res = await api.put(`/auth/reset-password/${token}`, { password });
             setMessage(res.data.message || 'Password successfully reset!');
 
             // Redirect to login after successful reset
