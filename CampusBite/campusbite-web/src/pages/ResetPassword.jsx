@@ -46,46 +46,48 @@ const ResetPassword = () => {
     };
 
     return (
-        <div className="login-container">
-            <div className="login-card" style={{ maxWidth: '400px', width: '90%' }}>
-                <h2 className="login-title">Create New Password</h2>
-                <p style={{ color: '#ccc', textAlign: 'center', marginBottom: '20px', fontSize: '0.9rem' }}>
+        <div className="auth-container animate-fade-in">
+            <div className="auth-card" style={{ maxWidth: '400px', width: '90%' }}>
+                <h2 className="heading-2" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>Create New Password</h2>
+                <p style={{ color: 'var(--gray)', textAlign: 'center', marginBottom: '20px', fontSize: '0.95rem', lineHeight: '1.5' }}>
                     Enter your new secure password below to regain access to your CampusBite account.
                 </p>
 
-                {message && <div style={{ padding: '10px', backgroundColor: 'rgba(76, 175, 80, 0.2)', color: '#4CAF50', borderRadius: '8px', marginBottom: '15px', textAlign: 'center', fontSize: '0.9rem' }}>{message} Redirecting to login...</div>}
-                {error && <div style={{ padding: '10px', backgroundColor: 'rgba(244, 67, 54, 0.2)', color: '#f44336', borderRadius: '8px', marginBottom: '15px', textAlign: 'center', fontSize: '0.9rem' }}>{error}</div>}
+                {message && <div style={{ padding: '12px', backgroundColor: 'rgba(76, 175, 80, 0.1)', border: '1px solid rgba(76, 175, 80, 0.3)', color: '#4CAF50', borderRadius: '8px', marginBottom: '1.5rem', textAlign: 'center', fontSize: '0.9rem' }}>{message} Redirecting to login...</div>}
+                {error && <div style={{ padding: '12px', backgroundColor: 'rgba(244, 67, 54, 0.1)', border: '1px solid rgba(244, 67, 54, 0.3)', color: 'var(--danger)', borderRadius: '8px', marginBottom: '1.5rem', textAlign: 'center', fontSize: '0.9rem' }}>{error}</div>}
 
                 {!message && (
-                    <form onSubmit={handleSubmit} className="login-form">
-                        <div className="form-group">
+                    <form onSubmit={handleSubmit}>
+                        <div className="input-group">
                             <label>New Password</label>
                             <input
                                 type="password"
+                                className="input-control"
                                 placeholder="Enter secure new password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
                         </div>
-                        <div className="form-group" style={{ marginTop: '15px' }}>
+                        <div className="input-group" style={{ marginTop: '1rem' }}>
                             <label>Confirm Password</label>
                             <input
                                 type="password"
+                                className="input-control"
                                 placeholder="Confirm new password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
                             />
                         </div>
-                        <button type="submit" className="login-button" disabled={loading} style={{ marginTop: '20px' }}>
+                        <button type="submit" className="btn btn-primary" disabled={loading} style={{ width: '100%', marginTop: '1rem' }}>
                             {loading ? 'Resetting Password...' : 'Reset Password'}
                         </button>
                     </form>
                 )}
 
-                <p className="register-link" style={{ marginTop: '20px' }}>
-                    <Link to="/login" style={{ color: '#aaa' }}>Return to Login</Link>
+                <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--gray)' }}>
+                    <Link to="/login" style={{ color: 'var(--primary)', fontWeight: '500' }}>Return to Login</Link>
                 </p>
             </div>
         </div>
