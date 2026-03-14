@@ -128,14 +128,7 @@ const OutletMenu = () => {
 
                     {/* Cart Sidebar */}
                     <div style={{ flex: '1 1 35%', position: 'sticky', top: '100px' }}>
-                        {/* Mobile Basket Title */}
-                        <div className="flex md:hidden items-center gap-3" style={{ marginBottom: '1rem' }}>
-                            <div style={{ background: 'rgba(255,90,95,0.1)', color: 'var(--primary)', padding: '0.4rem', borderRadius: 'var(--radius-md)' }}>
-                                <ShoppingCart size={20} />
-                            </div>
-                            <h3 className="heading-3" style={{ fontSize: '1.2rem', margin: 0 }}>Order Basket</h3>
-                        </div>
-
+                        
                         <div className="card shadow-lg" style={{ borderTop: '4px solid var(--primary)' }}>
                             <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem', marginBottom: '1.25rem' }}>
                                 {activeOutlet ? (
