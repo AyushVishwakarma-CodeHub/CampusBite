@@ -113,11 +113,11 @@ const forgotPassword = async (req, res) => {
         `;
 
         try {
+            // Log connection attempt for diagnostics
+            console.log(`Attempting to send email to ${user.email} using ${process.env.EMAIL_USER}`);
+
             const transporter = nodemailer.createTransport({
-                host: 'smtp.gmail.com',
-                port: 465,
-                secure: true,
-                family: 4, // Force IPv4
+                service: 'gmail',
                 auth: {
                     user: process.env.EMAIL_USER,
                     pass: process.env.EMAIL_PASS,
@@ -127,6 +127,15 @@ const forgotPassword = async (req, res) => {
                 }
             });
 
+            // Verify connection configuration
+            try {
+                await transporter.verify();
+                console.log('SMTP connection verified successfully');
+            } catch (verifyError) {
+                console.error('SMTP Verification Error:', verifyError);
+                throw new Error(`SMTP Verification Failed: ${verifyError.message}`);
+            }
+
             await transporter.sendMail({
                 from: `"CampusBite Team" <${process.env.EMAIL_USER}>`,
                 to: user.email,
@@ -134,14 +143,19 @@ const forgotPassword = async (req, res) => {
                 html: message,
             });
 
+            console.log('Email sent successfully');
             res.status(200).json({ success: true, message: 'Email sent' });
         } catch (error) {
             user.resetPasswordToken = undefined;
             user.resetPasswordExpire = undefined;
             await user.save();
 
-            console.error('Email send error:', error);
-            return res.status(500).json({ message: 'Email could not be sent. Render configuration error.', error: error.message });
+            console.error('Detailed Email Failure:', error);
+            return res.status(500).json({ 
+                message: 'Email could not be sent. Potential network block on Render.', 
+                error: error.message,
+                tip: 'Check if Google flagged the login from Render IP or if port 465/587 is blocked.'
+            });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
