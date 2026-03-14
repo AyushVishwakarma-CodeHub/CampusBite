@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const axios = require('axios');
 const generateToken = (id, role) => {
     return jwt.sign({ id, role }, process.env.JWT_SECRET, {
         expiresIn: '30d',
@@ -115,23 +116,37 @@ const forgotPassword = async (req, res) => {
         try {
             console.log(`Email request for: ${user.email}`);
 
-            let transporterConfig;
-
             if (process.env.SENDGRID_API_KEY) {
-                // Professional Production Config (SendGrid)
-                console.log('Using SendGrid for production email delivery');
-                transporterConfig = {
-                    host: 'smtp.sendgrid.net',
-                    port: 587,
-                    auth: {
-                        user: 'apikey',
-                        pass: process.env.SENDGRID_API_KEY
-                    }
+                // Professional Production Config (SendGrid HTTP API)
+                console.log('Using SendGrid HTTP API for production email delivery');
+                
+                const data = {
+                    personalizations: [{
+                        to: [{ email: user.email }]
+                    }],
+                    from: { 
+                        email: process.env.EMAIL_USER || 'campusbite.official@gmail.com',
+                        name: 'CampusBite Team'
+                    },
+                    subject: 'CampusBite Password Reset',
+                    content: [{
+                        type: 'text/html',
+                        value: message
+                    }]
                 };
+
+                await axios.post('https://api.sendgrid.com/v3/mail/send', data, {
+                    headers: {
+                        'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                console.log('Email sent successfully via SendGrid API');
             } else {
-                // Local Development Config (Gmail)
-                console.log('Using Gmail for development email delivery');
-                transporterConfig = {
+                // Local Development Config (Gmail SMTP)
+                console.log('Using Gmail SMTP for development');
+                const transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
                         user: process.env.EMAIL_USER,
@@ -140,26 +155,16 @@ const forgotPassword = async (req, res) => {
                     tls: {
                         rejectUnauthorized: false
                     }
-                };
+                });
+
+                await transporter.sendMail({
+                    from: `"CampusBite Team" <${process.env.EMAIL_USER}>`,
+                    to: user.email,
+                    subject: 'CampusBite Password Reset',
+                    html: message,
+                });
+                console.log('Email sent successfully via Gmail');
             }
-
-            const transporter = nodemailer.createTransport(transporterConfig);
-
-            // Verify connection
-            try {
-                await transporter.verify();
-                console.log('Email server connection verified');
-            } catch (connectionError) {
-                console.error('Email Connection Error:', connectionError);
-                throw new Error(`Connection Failed: ${connectionError.message}`);
-            }
-
-            await transporter.sendMail({
-                from: `"CampusBite Team" <${process.env.EMAIL_USER || 'no-reply@campusbite.com'}>`,
-                to: user.email,
-                subject: 'CampusBite Password Reset',
-                html: message,
-            });
 
             res.status(200).json({ success: true, message: 'Email sent successfully' });
         } catch (error) {
