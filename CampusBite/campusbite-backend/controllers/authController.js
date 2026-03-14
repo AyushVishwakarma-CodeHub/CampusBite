@@ -113,38 +113,55 @@ const forgotPassword = async (req, res) => {
         `;
 
         try {
-            // Log connection attempt for diagnostics
-            console.log(`Attempting to send email to ${user.email} using ${process.env.EMAIL_USER}`);
+            console.log(`Email request for: ${user.email}`);
 
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASS,
-                },
-                tls: {
-                    rejectUnauthorized: false
-                }
-            });
+            let transporterConfig;
 
-            // Verify connection configuration
+            if (process.env.SENDGRID_API_KEY) {
+                // Professional Production Config (SendGrid)
+                console.log('Using SendGrid for production email delivery');
+                transporterConfig = {
+                    host: 'smtp.sendgrid.net',
+                    port: 587,
+                    auth: {
+                        user: 'apikey',
+                        pass: process.env.SENDGRID_API_KEY
+                    }
+                };
+            } else {
+                // Local Development Config (Gmail)
+                console.log('Using Gmail for development email delivery');
+                transporterConfig = {
+                    service: 'gmail',
+                    auth: {
+                        user: process.env.EMAIL_USER,
+                        pass: process.env.EMAIL_PASS,
+                    },
+                    tls: {
+                        rejectUnauthorized: false
+                    }
+                };
+            }
+
+            const transporter = nodemailer.createTransport(transporterConfig);
+
+            // Verify connection
             try {
                 await transporter.verify();
-                console.log('SMTP connection verified successfully');
-            } catch (verifyError) {
-                console.error('SMTP Verification Error:', verifyError);
-                throw new Error(`SMTP Verification Failed: ${verifyError.message}`);
+                console.log('Email server connection verified');
+            } catch (connectionError) {
+                console.error('Email Connection Error:', connectionError);
+                throw new Error(`Connection Failed: ${connectionError.message}`);
             }
 
             await transporter.sendMail({
-                from: `"CampusBite Team" <${process.env.EMAIL_USER}>`,
+                from: `"CampusBite Team" <${process.env.EMAIL_USER || 'no-reply@campusbite.com'}>`,
                 to: user.email,
                 subject: 'CampusBite Password Reset',
                 html: message,
             });
 
-            console.log('Email sent successfully');
-            res.status(200).json({ success: true, message: 'Email sent' });
+            res.status(200).json({ success: true, message: 'Email sent successfully' });
         } catch (error) {
             user.resetPasswordToken = undefined;
             user.resetPasswordExpire = undefined;
