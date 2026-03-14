@@ -77,11 +77,11 @@ const seed = async () => {
 
         // --- Create Menu Items ---
         const menuItems = [
-            { name: 'Aloo Paratha', description: 'Stuffed whole wheat flatbread served with butter and curd', price: 60, isAvailable: true },
-            { name: 'Chole Bhature', description: 'Spiced chickpeas with fluffy deep-fried bread', price: 80, isAvailable: true },
-            { name: 'Paneer Butter Masala', description: 'Cottage cheese in a rich tomato-based gravy', price: 120, isAvailable: true },
-            { name: 'Sweet Lassi', description: 'Refreshing yogurt-based chilled drink', price: 40, isAvailable: true },
-            { name: 'Masala Chai', description: 'Spiced Indian tea brewed with ginger and cardamom', price: 20, isAvailable: true },
+            { name: 'Aloo Paratha', description: 'Stuffed whole wheat flatbread served with butter and curd', price: 60, isAvailable: true, image: '/images/aloo_paratha.png' },
+            { name: 'Chole Bhature', description: 'Spiced chickpeas with fluffy deep-fried bread', price: 80, isAvailable: true, image: '/images/chole_bhature.png' },
+            { name: 'Paneer Butter Masala', description: 'Cottage cheese in a rich tomato-based gravy', price: 120, isAvailable: true, image: '/images/paneer_butter_masala.png' },
+            { name: 'Sweet Lassi', description: 'Refreshing yogurt-based chilled drink', price: 40, isAvailable: true, image: '/images/sweet_lassi.png' },
+            { name: 'Masala Chai', description: 'Spiced Indian tea brewed with ginger and cardamom', price: 20, isAvailable: true, image: '/images/masala_chai.png' },
         ];
 
         for (const item of menuItems) {

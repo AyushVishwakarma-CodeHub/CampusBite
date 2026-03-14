@@ -63,124 +63,142 @@ const OutletMenu = () => {
                 </div>
             </div>
 
-            <div className="container flex flex-col md:flex-row gap-8" style={{ padding: '3rem 1.25rem', alignItems: 'flex-start' }}>
-
-                {/* Menu Items */}
-                <div style={{ flex: '1 1 65%' }}>
-                    <div className="flex justify-between items-center" style={{ marginBottom: '2rem' }}>
-                        <h2 className="heading-2">Main Menu</h2>
+            {/* Menu Sections Container */}
+            <div className="container" style={{ padding: '3rem 1.25rem' }}>
+                
+                {/* Unified Header Row for Perfect Alignment */}
+                <div className="flex flex-col md:flex-row gap-8" style={{ marginBottom: '2rem', alignItems: 'baseline' }}>
+                    <div style={{ flex: '1 1 65%', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                        <h2 className="heading-2" style={{ margin: 0 }}>Main Menu</h2>
                         <div className="badge badge-gray">{menuItems.length} items available</div>
                     </div>
-
-                    <div className="grid grid-cols-1 gap-4">
-                        {menuItems.map(item => (
-                            <div key={item._id} className="card hoverable-card flex justify-between items-center" style={{ padding: '1.25rem' }}>
-                                <div className="flex gap-4 items-center">
-                                    <div style={{ width: '85px', height: '85px', borderRadius: 'var(--radius-md)', overflow: 'hidden', background: 'var(--border)' }}>
-                                        {item.image ? (
-                                            <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                        ) : (
-                                            <div className="flex items-center justify-center h-full text-2xl">🍲</div>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <h3 className="heading-3" style={{ fontSize: '1.15rem' }}>{item.name}</h3>
-                                        <p className="text-muted" style={{ fontSize: '0.85rem', marginBottom: '0.5rem', maxWidth: '300px' }}>{item.description}</p>
-                                        <div className="flex items-center gap-2">
-                                            <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '1.1rem' }}>₹{item.price}</span>
-                                            {item.isVeg && <span className="badge badge-success" style={{ fontSize: '0.65rem' }}>VEG</span>}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-3">
-                                    {getQuantity(item._id) > 0 ? (
-                                        <div className="flex items-center gap-3 bg-light" style={{ padding: '0.4rem', borderRadius: 'var(--radius-full)', background: 'var(--border)' }}>
-                                            <button className="btn btn-outline" style={{ width: '32px', height: '32px', padding: 0, borderRadius: '50%' }} onClick={() => removeFromCart(item._id)}><Minus size={14} /></button>
-                                            <span style={{ fontWeight: 700, minWidth: '20px', textAlign: 'center' }}>{getQuantity(item._id)}</span>
-                                            <button className="btn btn-primary" style={{ width: '32px', height: '32px', padding: 0, borderRadius: '50%' }} onClick={() => addToCart(item, outlet)}><Plus size={14} /></button>
-                                        </div>
-                                    ) : (
-                                        <button className="btn btn-outline" style={{ padding: '0.5rem 1.5rem', borderColor: 'var(--primary)', color: 'var(--primary)' }} onClick={() => addToCart(item, outlet)}>ADD</button>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                        {menuItems.length === 0 && (
-                            <div className="text-center" style={{ padding: '4rem 0' }}>
-                                <Info size={48} color="var(--gray)" style={{ margin: '0 auto 1rem' }} />
-                                <p className="text-muted">No items available currently.</p>
-                            </div>
-                        )}
+                    <div className="hidden md:flex" style={{ flex: '1 1 35%', alignItems: 'baseline', gap: '0.75rem' }}>
+                        <div style={{ background: 'rgba(255,90,95,0.1)', color: 'var(--primary)', padding: '0.4rem', borderRadius: 'var(--radius-md)', display: 'inline-flex', verticalAlign: 'middle', position: 'relative', top: '2px' }}>
+                            <ShoppingCart size={18} />
+                        </div>
+                        <h2 className="heading-2" style={{ margin: 0, fontSize: '1.5rem' }}>Order Basket</h2>
                     </div>
                 </div>
 
-                {/* Cart Sidebar */}
-                <div style={{ flex: '1 1 35%', position: 'sticky', top: '100px' }}>
-                    <div className="card shadow-lg" style={{ borderTop: '4px solid var(--primary)' }}>
-                        <div className="flex items-center gap-3" style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1.25rem', marginBottom: '1.25rem' }}>
-                            <div style={{ background: 'rgba(255,90,95,0.1)', color: 'var(--primary)', padding: '0.6rem', borderRadius: 'var(--radius-md)' }}>
-                                <ShoppingCart size={22} />
-                            </div>
-                            <div>
-                                <h3 className="heading-3" style={{ fontSize: '1.1rem' }}>Order Basket</h3>
-                                {activeOutlet && <p className="text-xs text-muted">From {activeOutlet.name}</p>}
-                            </div>
-                        </div>
-
-                        {cart.length === 0 ? (
-                            <div className="text-center" style={{ padding: '3rem 0' }}>
-                                <div style={{ fontSize: '3rem', marginBottom: '1rem', opacity: 0.5 }}>🛒</div>
-                                <p className="text-muted text-sm">Your basket is empty.<br />Browse the menu and add items!</p>
-                            </div>
-                        ) : (
-                            <>
-                                <div className="flex flex-col gap-4" style={{ marginBottom: '1.5rem', maxHeight: '350px', overflowY: 'auto', paddingRight: '0.5rem' }}>
-                                    {cart.map((cartItem, idx) => (
-                                        <div key={idx} className="flex justify-between items-center">
-                                            <div>
-                                                <p style={{ fontWeight: 600, fontSize: '0.95rem' }}>{cartItem.menuItem.name}</p>
-                                                <p className="text-muted" style={{ fontSize: '0.8rem' }}>₹{cartItem.price} x {cartItem.quantity}</p>
-                                            </div>
-                                            <p style={{ fontWeight: 700 }}>₹{cartItem.price * cartItem.quantity}</p>
+                <div className="flex flex-col md:flex-row gap-8" style={{ alignItems: 'flex-start' }}>
+                    {/* Menu Items */}
+                    <div style={{ flex: '1 1 65%' }}>
+                        <div className="grid grid-cols-1 gap-4">
+                            {menuItems.map(item => (
+                                <div key={item._id} className="card hoverable-card flex justify-between items-center" style={{ padding: '1.25rem' }}>
+                                    <div className="flex gap-4 items-center">
+                                        <div style={{ width: '85px', height: '85px', borderRadius: 'var(--radius-md)', overflow: 'hidden', background: 'var(--border)' }}>
+                                            {item.image ? (
+                                                <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            ) : (
+                                                <div className="flex items-center justify-center h-full text-2xl">🍲</div>
+                                            )}
                                         </div>
-                                    ))}
-                                </div>
-
-                                <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem', marginBottom: '1.5rem' }}>
-                                    <div className="flex justify-between items-center" style={{ marginBottom: '0.5rem' }}>
-                                        <span className="text-muted">Subtotal</span>
-                                        <span className="font-semibold">₹{totalAmount}</span>
+                                        <div>
+                                            <h3 className="heading-3" style={{ fontSize: '1.15rem' }}>{item.name}</h3>
+                                            <p className="text-muted" style={{ fontSize: '0.85rem', marginBottom: '0.5rem', maxWidth: '300px' }}>{item.description}</p>
+                                            <div className="flex items-center gap-2">
+                                                <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '1.1rem' }}>₹{item.price}</span>
+                                                {item.isVeg && <span className="badge badge-success" style={{ fontSize: '0.65rem' }}>VEG</span>}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="heading-3">Total</span>
-                                        <span className="heading-3" style={{ color: 'var(--primary)' }}>₹{totalAmount}</span>
+
+                                    <div className="flex items-center gap-3">
+                                        {getQuantity(item._id) > 0 ? (
+                                            <div className="flex items-center gap-3 bg-light" style={{ padding: '0.4rem', borderRadius: 'var(--radius-full)', background: 'var(--border)' }}>
+                                                <button className="btn btn-outline" style={{ width: '32px', height: '32px', padding: 0, borderRadius: '50%' }} onClick={() => removeFromCart(item._id)}><Minus size={14} /></button>
+                                                <span style={{ fontWeight: 700, minWidth: '20px', textAlign: 'center' }}>{getQuantity(item._id)}</span>
+                                                <button className="btn btn-primary" style={{ width: '32px', height: '32px', padding: 0, borderRadius: '50%' }} onClick={() => addToCart(item, outlet)}><Plus size={14} /></button>
+                                            </div>
+                                        ) : (
+                                            <button className="btn btn-outline" style={{ padding: '0.5rem 1.5rem', borderColor: 'var(--primary)', color: 'var(--primary)' }} onClick={() => addToCart(item, outlet)}>ADD</button>
+                                        )}
                                     </div>
                                 </div>
-
-                                <button
-                                    className="btn btn-primary"
-                                    style={{ width: '100%', padding: '1rem', fontSize: '1.05rem', gap: '0.5rem' }}
-                                    onClick={() => navigate('/checkout')}
-                                >
-                                    Proceed to Checkout
-                                </button>
-
-                                <button
-                                    className="text-muted text-xs"
-                                    style={{ width: '100%', marginTop: '1rem', textDecoration: 'underline' }}
-                                    onClick={clearCart}
-                                >
-                                    Clear Basket
-                                </button>
-                            </>
-                        )}
+                            ))}
+                            {menuItems.length === 0 && (
+                                <div className="text-center" style={{ padding: '4rem 0' }}>
+                                    <Info size={48} color="var(--gray)" style={{ margin: '0 auto 1rem' }} />
+                                    <p className="text-muted">No items available currently.</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
-                    <div className="card" style={{ marginTop: '1.5rem', background: 'rgba(0,166,153,0.03)', padding: '1rem' }}>
-                        <div className="flex gap-3 items-center">
-                            <Clock size={18} color="var(--secondary)" />
-                            <p className="text-xs" style={{ color: 'var(--secondary)', fontWeight: 600 }}>Usually ready in 15-20 mins</p>
+                    {/* Cart Sidebar */}
+                    <div style={{ flex: '1 1 35%', position: 'sticky', top: '100px' }}>
+                        {/* Mobile Basket Title */}
+                        <div className="flex md:hidden items-center gap-3" style={{ marginBottom: '1rem' }}>
+                            <div style={{ background: 'rgba(255,90,95,0.1)', color: 'var(--primary)', padding: '0.4rem', borderRadius: 'var(--radius-md)' }}>
+                                <ShoppingCart size={20} />
+                            </div>
+                            <h3 className="heading-3" style={{ fontSize: '1.2rem', margin: 0 }}>Order Basket</h3>
+                        </div>
+
+                        <div className="card shadow-lg" style={{ borderTop: '4px solid var(--primary)' }}>
+                            <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem', marginBottom: '1.25rem' }}>
+                                {activeOutlet ? (
+                                    <p className="text-xs text-muted" style={{ fontWeight: 600 }}>Ordering from {activeOutlet.name}</p>
+                                ) : (
+                                    <p className="text-xs text-muted" style={{ fontWeight: 600 }}>Your active selection</p>
+                                )}
+                            </div>
+
+                            {cart.length === 0 ? (
+                                <div className="text-center" style={{ padding: '3rem 0' }}>
+                                    <div style={{ fontSize: '3rem', marginBottom: '1rem', opacity: 0.5 }}>🛒</div>
+                                    <p className="text-muted text-sm">Your basket is empty.<br />Browse the menu and add items!</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="flex flex-col gap-4" style={{ marginBottom: '1.5rem', maxHeight: '350px', overflowY: 'auto', paddingRight: '0.5rem' }}>
+                                        {cart.map((cartItem, idx) => (
+                                            <div key={idx} className="flex justify-between items-center">
+                                                <div>
+                                                    <p style={{ fontWeight: 600, fontSize: '0.95rem' }}>{cartItem.menuItem.name}</p>
+                                                    <p className="text-muted" style={{ fontSize: '0.8rem' }}>₹{cartItem.price} x {cartItem.quantity}</p>
+                                                </div>
+                                                <p style={{ fontWeight: 700 }}>₹{cartItem.price * cartItem.quantity}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem', marginBottom: '1.5rem' }}>
+                                        <div className="flex justify-between items-center" style={{ marginBottom: '0.5rem' }}>
+                                            <span className="text-muted">Subtotal</span>
+                                            <span className="font-semibold">₹{totalAmount}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center">
+                                            <span className="heading-3">Total</span>
+                                            <span className="heading-3" style={{ color: 'var(--primary)' }}>₹{totalAmount}</span>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        className="btn btn-primary"
+                                        style={{ width: '100%', padding: '1rem', fontSize: '1.05rem', gap: '0.5rem' }}
+                                        onClick={() => navigate('/checkout')}
+                                    >
+                                        Proceed to Checkout
+                                    </button>
+
+                                    <button
+                                        className="text-muted text-xs"
+                                        style={{ width: '100%', marginTop: '1rem', textDecoration: 'underline' }}
+                                        onClick={clearCart}
+                                    >
+                                        Clear Basket
+                                    </button>
+                                </>
+                            )}
+                        </div>
+
+                        <div className="card" style={{ marginTop: '1.5rem', background: 'rgba(0,166,153,0.03)', padding: '1rem' }}>
+                            <div className="flex gap-3 items-center">
+                                <Clock size={18} color="var(--secondary)" />
+                                <p className="text-xs" style={{ color: 'var(--secondary)', fontWeight: 600 }}>Usually ready in 15-20 mins</p>
+                            </div>
                         </div>
                     </div>
                 </div>

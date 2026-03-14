@@ -1,40 +1,35 @@
-/**
- * Update outlet images — run with: node updateImages.js
- */
 require('dotenv').config();
 const mongoose = require('mongoose');
-const Outlet = require('./models/Outlet');
+const MenuItem = require('./models/MenuItem');
 
-const IMAGE_MAP = {
-    'Campus Cafe': 'http://localhost:8000/public/images/campus_cafe.png',
-    'Kitchen Ette': 'http://localhost:8000/public/images/kitchen_ette.png',
-    'Oven Express': 'http://localhost:8000/public/images/oven_express.png',
-    'Campus Fusion': 'http://localhost:8000/public/images/campus_fusion.png',
-    'Bengali Bawarchi': 'http://localhost:8000/public/images/bengali_bawarchi.png',
-    'Yummy Meals': 'http://localhost:8000/public/images/yummy_meals.png',
-    'Punjabi Tadka': 'http://localhost:8000/public/images/punjabi_tadka.png'
-};
-
-(async () => {
+const updateImages = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
-        console.log('✅ Connected to MongoDB Atlas');
+        console.log('✅ Connected to MongoDB');
 
-        for (const [name, path] of Object.entries(IMAGE_MAP)) {
-            const outlet = await Outlet.findOneAndUpdate({ name }, { image: path }, { new: true });
-            if (outlet) {
-                console.log(`✅ Updated image for: ${name}`);
-            } else {
-                console.log(`⏩ Outlet not found: ${name}`);
-            }
+        const updates = [
+            { name: 'Aloo Paratha', image: '/images/aloo_paratha.png' },
+            { name: 'Chole Bhature', image: '/images/chole_bhature.png' },
+            { name: 'Paneer Butter Masala', image: '/images/paneer_butter_masala.png' },
+            { name: 'Sweet Lassi', image: '/images/sweet_lassi.png' },
+            { name: 'Masala Chai', image: '/images/masala_chai.png' }
+        ];
+
+        for (const up of updates) {
+            const result = await MenuItem.updateMany(
+                { name: up.name },
+                { $set: { image: up.image } }
+            );
+            console.log(`Updated ${up.name}: ${result.modifiedCount} docs`);
         }
 
-        console.log('\n🎉 Image update complete!');
         await mongoose.disconnect();
+        console.log('✅ Update complete.');
         process.exit(0);
     } catch (err) {
-        console.error('❌ Error details:');
-        console.dir(err);
+        console.error('❌ Update failed:', err.message);
         process.exit(1);
     }
-})();
+};
+
+updateImages();
