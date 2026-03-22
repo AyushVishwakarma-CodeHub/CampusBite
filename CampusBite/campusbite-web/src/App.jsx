@@ -22,6 +22,7 @@ import CreateOutlet from './pages/CreateOutlet';
 import OutletOrders from './pages/OutletOrders';
 import OutletMenuManager from './pages/OutletMenuManager';
 import OutletFeedback from './pages/OutletFeedback';
+import OutletAnalytics from './pages/OutletAnalytics';
 
 // Admin
 import AdminDashboard from './pages/AdminDashboard';
@@ -53,6 +54,7 @@ function App() {
                 <Route path="/outlet/orders" element={<ProtectedRoute roles={['outlet']} element={<OutletOrders />} />} />
                 <Route path="/outlet/manage-menu" element={<ProtectedRoute roles={['outlet']} element={<OutletMenuManager />} />} />
                 <Route path="/outlet/feedback" element={<ProtectedRoute roles={['outlet']} element={<OutletFeedback />} />} />
+                <Route path="/outlet/analytics" element={<ProtectedRoute roles={['outlet']} element={<OutletAnalytics />} />} />
 
                 {/* Admin Routes */}
                 <Route path="/admin/dashboard" element={<ProtectedRoute roles={['admin']} element={<AdminDashboard />} />} />

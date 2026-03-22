@@ -28,6 +28,8 @@ app.use('/api/menu', require('./routes/menuRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/feedback', require('./routes/feedbackRoutes'));
+app.use('/api/analytics', require('./routes/analyticsRoutes'));
+
 
 // Temporary admin route to update images
 const Outlet = require('./models/Outlet');

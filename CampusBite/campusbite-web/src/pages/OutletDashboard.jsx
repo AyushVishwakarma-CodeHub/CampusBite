@@ -51,7 +51,7 @@ const OutletDashboard = () => {
                         <button className="btn btn-primary" onClick={() => alert("Outlet registration flow not fully implemented in this demo")}>Create Outlet Profile</button>
                     </div>
                 ) : (
-                    <div className="grid md:grid-cols-3 gap-6">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div
                             className="card hoverable-card"
                             style={{ cursor: 'pointer', textAlign: 'center', padding: '3rem' }}
@@ -77,6 +77,15 @@ const OutletDashboard = () => {
                         >
                             <h3 className="heading-2 text-primary" style={{ marginBottom: '1rem' }}>Customer Feedback</h3>
                             <p className="text-muted">Read reviews and check the overall star ratings provided by students to your outlet.</p>
+                        </div>
+
+                        <div
+                            className="card hoverable-card"
+                            style={{ cursor: 'pointer', textAlign: 'center', padding: '3rem' }}
+                            onClick={() => navigate('/outlet/analytics', { state: { outletId: outlet._id } })}
+                        >
+                            <h3 className="heading-2 text-primary" style={{ marginBottom: '1rem' }}>Live Analytics</h3>
+                            <p className="text-muted">Track your realtime revenue, total order volume, and top-selling dishes.</p>
                         </div>
                     </div>
                 )}
