@@ -31,7 +31,19 @@ const createOrder = async (req, res) => {
             });
         }
 
+        // Fetch populated order for the real-time outlet dashboard
+        const populatedOrder = await Order.findById(order._id)
+            .populate('studentId', 'name')
+            .populate('items.menuItem', 'name price');
+
+        // Emit real-time WebSocket event directly to the Outlet's room
+        const io = req.app.get('io');
+        if (io) {
+            io.to(outletId).emit('newOrder', populatedOrder);
+        }
+
         res.status(201).json(order);
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -72,7 +84,14 @@ const updateOrderStatus = async (req, res) => {
             return res.status(404).json({ message: 'Order not found' });
         }
 
+        // Emit real-time WebSocket event to the Student's room
+        const io = req.app.get('io');
+        if (io) {
+            io.to(order.studentId.toString()).emit('orderStatusUpdate', order);
+        }
+
         res.json(order);
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

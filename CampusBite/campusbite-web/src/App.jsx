@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { SocketProvider } from './context/SocketContext';
+import { Toaster } from 'react-hot-toast';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Pages
@@ -30,9 +32,12 @@ import AdminDashboard from './pages/AdminDashboard';
 function App() {
   return (
     <AuthProvider>
-      <CartProvider>
-        <BrowserRouter>
-          <div className="app-container">
+      <SocketProvider>
+        <CartProvider>
+          <BrowserRouter>
+            <Toaster />
+            <div className="app-container">
+
             <main>
               <Routes>
                 {/* Public Routes */}
@@ -61,9 +66,11 @@ function App() {
               </Routes>
             </main>
           </div>
-        </BrowserRouter>
-      </CartProvider>
+          </BrowserRouter>
+        </CartProvider>
+      </SocketProvider>
     </AuthProvider>
+
   );
 }
 

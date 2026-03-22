@@ -2,12 +2,46 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const http = require('http');
+const { Server } = require("socket.io");
 
 dotenv.config();
 
 // Connect to database is done before starting the server down below
 
 const app = express();
+const server = http.createServer(app);
+
+// Socket.io initialization
+const io = new Server(server, {
+    cors: {
+        origin: [
+            'http://localhost:5173',
+            'https://campus-bite-seven.vercel.app',
+            'https://campusbitelive.vercel.app'
+        ],
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true
+    }
+});
+
+// Make io accessible globally in controllers
+app.set('io', io);
+
+io.on('connection', (socket) => {
+    console.log(`🔌 New client connected: ${socket.id}`);
+
+    // Client can join a specific room (outletId or studentId)
+    socket.on('joinRoom', (roomId) => {
+        socket.join(roomId);
+        console.log(`Socket ${socket.id} joined room ${roomId}`);
+    });
+
+    socket.on('disconnect', () => {
+        console.log(`❌ Client disconnected: ${socket.id}`);
+    });
+});
+
 
 // Middleware
 app.use(cors({
@@ -60,8 +94,8 @@ const PORT = process.env.PORT || 8000;
 
 // Connect to database and start server
 connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Backend server running on port ${PORT}`);
+    server.listen(PORT, () => {
+        console.log(`🚀 Backend & WebSocket server running on port ${PORT}`);
     });
 }).catch((error) => {
     console.error(`Failed to start server: ${error.message}`);

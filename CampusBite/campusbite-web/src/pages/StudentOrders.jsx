@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
+import { useSocket } from '../context/SocketContext';
 import { Clock, RefreshCw, Star } from 'lucide-react';
 
 const StudentOrders = () => {
     const { user } = useAuth();
+    const socket = useSocket();
     const [orders, setOrders] = useState([]);
+
     const [loading, setLoading] = useState(true);
 
     // Feedback state
@@ -30,7 +33,23 @@ const StudentOrders = () => {
         if (user && user.role === 'student') fetchOrders();
     }, [user]);
 
+    // WebSocket Integration for Live Status Updates
+    useEffect(() => {
+        if (!socket) return;
+
+        const handleStatusUpdate = (updatedOrder) => {
+            setOrders(prev => prev.map(o => o._id === updatedOrder._id ? { ...o, status: updatedOrder.status } : o));
+        };
+
+        socket.on('orderStatusUpdate', handleStatusUpdate);
+
+        return () => {
+            socket.off('orderStatusUpdate', handleStatusUpdate);
+        };
+    }, [socket]);
+
     const getStatusColor = (status) => {
+
         switch (status) {
             case 'Pending': return 'var(--warning)';
             case 'Preparing': return 'var(--primary)';

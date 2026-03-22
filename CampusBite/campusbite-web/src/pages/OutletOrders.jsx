@@ -3,13 +3,17 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
+import { useSocket } from '../context/SocketContext';
 import { Clock, RefreshCcw, Check, MoveRight } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const OutletOrders = () => {
     const { state } = useLocation();
     const { user } = useAuth();
+    const socket = useSocket();
     const navigate = useNavigate();
     const outletId = state?.outletId;
+
 
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -32,7 +36,28 @@ const OutletOrders = () => {
         fetchOrders();
     }, [user, navigate, outletId]);
 
+    // WebSocket Integration for Live Queue
+    useEffect(() => {
+        if (!socket || !outletId) return;
+
+        // Join the specific outlet room
+        socket.emit('joinRoom', outletId);
+
+        const handleNewOrder = (order) => {
+            console.log("Live Order Received:", order);
+            toast.success(`New Ticket: Token #${order.tokenNumber}`, { duration: 6000 });
+            setOrders(prev => [order, ...prev]);
+        };
+
+        socket.on('newOrder', handleNewOrder);
+
+        return () => {
+            socket.off('newOrder', handleNewOrder);
+        };
+    }, [socket, outletId]);
+
     const updateStatus = async (orderId, newStatus) => {
+
         try {
             await api.put(`/orders/${orderId}/status`, { status: newStatus });
             // Optimistic update
