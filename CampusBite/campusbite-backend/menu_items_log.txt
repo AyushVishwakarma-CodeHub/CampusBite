@@ -1,0 +1,35 @@
+Punjabi Tadka - Aloo Paratha - /images/aloo_paratha.png
+Punjabi Tadka - Chole Bhature - /images/chole_bhature.png
+Punjabi Tadka - Paneer Butter Masala - /images/paneer_butter_masala.png
+Punjabi Tadka - Sweet Lassi - /images/sweet_lassi.png
+Punjabi Tadka - Masala Chai - /images/masala_chai.png
+Campus Cafe - Cappuccino - NO IMAGE
+Campus Cafe - Club Sandwich - NO IMAGE
+Campus Cafe - Cold Coffee - NO IMAGE
+Campus Cafe - Veg Wrap - NO IMAGE
+Campus Cafe - Brownie Fudge - NO IMAGE
+Kitchen Ette - Dal Makhani - NO IMAGE
+Kitchen Ette - Jeera Rice - NO IMAGE
+Kitchen Ette - Kadhai Paneer - NO IMAGE
+Kitchen Ette - Butter Naan - NO IMAGE
+Kitchen Ette - Gulab Jamun - NO IMAGE
+Oven Express - Margherita Pizza - NO IMAGE
+Oven Express - Pepperoni Pizza - NO IMAGE
+Oven Express - Penne Arrabbiata - NO IMAGE
+Oven Express - Garlic Bread - NO IMAGE
+Oven Express - Choco Lava Cake - NO IMAGE
+Campus Fusion - Schezwan Pasta - NO IMAGE
+Campus Fusion - Korean Fried Rice - NO IMAGE
+Campus Fusion - Paneer Tacos - NO IMAGE
+Campus Fusion - Honey Chilli Potato - NO IMAGE
+Campus Fusion - Mango Smoothie - NO IMAGE
+Bengali Bawarchi - Machher Jhol - NO IMAGE
+Bengali Bawarchi - Moong Dal - NO IMAGE
+Bengali Bawarchi - Aloo Posto - NO IMAGE
+Bengali Bawarchi - Mishti Doi - NO IMAGE
+Bengali Bawarchi - Roshogolla - NO IMAGE
+Yummy Meals - Full Thali - NO IMAGE
+Yummy Meals - Mini Thali - NO IMAGE
+Yummy Meals - Veg Biryani - NO IMAGE
+Yummy Meals - Dum Aloo - NO IMAGE
+Yummy Meals - Raita - NO IMAGE

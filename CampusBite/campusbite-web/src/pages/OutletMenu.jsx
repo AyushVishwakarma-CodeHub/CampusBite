@@ -67,20 +67,20 @@ const OutletMenu = () => {
             <div className="container" style={{ padding: '3rem 1.25rem' }}>
                 
                 {/* Unified Header Row for Perfect Alignment */}
-                <div className="flex flex-col md:flex-row gap-8" style={{ marginBottom: '2rem', alignItems: 'baseline' }}>
+                <div className="flex flex-row gap-12" style={{ marginBottom: '2rem', alignItems: 'baseline' }}>
                     <div style={{ flex: '1 1 65%', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                         <h2 className="heading-2" style={{ margin: 0 }}>Main Menu</h2>
                         <div className="badge badge-gray">{menuItems.length} items available</div>
                     </div>
-                    <div className="hidden md:flex" style={{ flex: '1 1 35%', alignItems: 'baseline', gap: '0.75rem' }}>
-                        <div style={{ background: 'rgba(255,90,95,0.1)', color: 'var(--primary)', padding: '0.4rem', borderRadius: 'var(--radius-md)', display: 'inline-flex', verticalAlign: 'middle', position: 'relative', top: '2px' }}>
+                    <div style={{ flex: '1 1 35%', display: 'flex', alignItems: 'baseline', gap: '0.75rem' }}>
+                        <div style={{ background: 'rgba(255,90,95,0.1)', color: 'var(--primary)', padding: '0.4rem', borderRadius: 'var(--radius-md)', display: 'inline-flex', verticalAlign: 'middle' }}>
                             <ShoppingCart size={18} />
                         </div>
                         <h2 className="heading-2" style={{ margin: 0, fontSize: '1.5rem' }}>Order Basket</h2>
                     </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-8" style={{ alignItems: 'flex-start' }}>
+                <div className="flex flex-col md:flex-row gap-12" style={{ alignItems: 'flex-start' }}>
                     {/* Menu Items */}
                     <div style={{ flex: '1 1 65%' }}>
                         <div className="grid grid-cols-1 gap-4">
