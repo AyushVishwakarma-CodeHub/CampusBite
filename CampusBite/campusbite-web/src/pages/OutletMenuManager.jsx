@@ -74,21 +74,20 @@ const OutletMenuManager = () => {
     const handleGenerateImage = async (e) => {
         e.preventDefault();
         if (!newItem.name) {
-            alert("Please enter an Item Name first to let the AI know what to generate.");
+            alert("Please enter an Item Name first to fetch a matching photograph.");
             return;
         }
         setGeneratingImage(true);
         
         try {
-            // Construct a highly detailed photography prompt
-            const prompt = `Delicious appetizing ${newItem.name}, ${newItem.description || ''}, professional food photography, 4k resolution, restaurant studio lighting, close up`;
-            const uniqueSeed = Math.floor(Math.random() * 1000000);
-            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=400&height=300&nologo=true&seed=${uniqueSeed}`;
+            // Using a highly reliable Photography CDN to fetch an actual high-quality photo of the food instead of relying on overloaded AI servers
+            const uniqueSeed = Math.floor(Math.random() * 10000);
+            const imageUrl = `https://loremflickr.com/400/300/${encodeURIComponent(newItem.name)},food/all?lock=${uniqueSeed}`;
             
-            // Ultra-reliable dynamic fallback if the AI server is overloaded
+            // Ultra-reliable dynamic fallback if the stock server is also overloaded
             const fallbackUrl = `https://placehold.co/400x300/ff5a5f/ffffff?text=${encodeURIComponent(newItem.name)}`;
             
-            // Preload the image in browser background so the spinner spins until the AI physically finishes rendering
+            // Preload the image in browser background so the spinner spins until the image physically finishes rendering
             const img = new Image();
             img.src = imageUrl;
             img.onload = () => {
@@ -96,7 +95,7 @@ const OutletMenuManager = () => {
                 setGeneratingImage(false);
             };
             img.onerror = () => {
-                 console.warn("Primary AI API is overloaded or down. Dropping to graphical fallback.");
+                 console.warn("Primary photography API is overloaded or down. Dropping to graphical fallback.");
                  setNewItem(prev => ({ ...prev, image: fallbackUrl }));
                  setGeneratingImage(false);
             }
@@ -166,7 +165,7 @@ const OutletMenuManager = () => {
                                             ✕
                                         </button>
                                         <div style={{ position: 'absolute', bottom: '0.5rem', left: '0.5rem', background: 'rgba(0,0,0,0.6)', color: 'white', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 600 }}>
-                                            AI GENERATED
+                                            AUTO PHOTO
                                         </div>
                                     </div>
                                 ) : (
@@ -179,7 +178,7 @@ const OutletMenuManager = () => {
                                         </button>
 
                                         <button type="button" className="btn btn-outline" disabled={generatingImage} onClick={handleGenerateImage} style={{ whiteSpace: 'nowrap', display: 'flex', gap: '0.4rem', alignItems: 'center', padding: '0.5rem 1rem' }}>
-                                            {generatingImage ? <span className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px', borderColor: 'rgba(0,0,0,0.1)', borderTopColor: 'var(--primary)' }}></span> : '🪄 AI'}
+                                            {generatingImage ? <span className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px', borderColor: 'rgba(0,0,0,0.1)', borderTopColor: 'var(--primary)' }}></span> : '🪄 Auto Photo'}
                                         </button>
                                     </div>
                                 )}
