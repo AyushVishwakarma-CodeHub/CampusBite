@@ -8,7 +8,7 @@ const generateTokenNumber = () => {
 
 const createOrder = async (req, res) => {
     try {
-        const { outletId, items, totalAmount, pickupType, timeSlot, deliveryDetails } = req.body;
+        const { outletId, items, totalAmount, pickupType, timeSlot, deliveryDetails, paymentStatus } = req.body;
 
         const tokenNumber = generateTokenNumber();
 
@@ -19,8 +19,10 @@ const createOrder = async (req, res) => {
             totalAmount,
             pickupType,
             timeSlot,
+            paymentStatus: paymentStatus || 'Pending',
             tokenNumber
         });
+
 
         if (pickupType === 'Delivery' && deliveryDetails) {
             await Delivery.create({

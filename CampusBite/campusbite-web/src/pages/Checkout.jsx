@@ -6,8 +6,10 @@ import Navbar from '../components/Navbar';
 import api from '../api';
 import { generateTimeSlots } from '../utils/timeSlots';
 import { CreditCard, CheckCircle2, ChevronRight, MapPin, Clock as ClockIcon, Info, ShoppingBag, Zap } from 'lucide-react';
+import CampusPayModal from '../components/CampusPayModal';
 
 const Checkout = () => {
+
     const { user } = useAuth();
     const { cart, activeOutlet, totalAmount, clearCart } = useCart();
     const navigate = useNavigate();
@@ -17,8 +19,10 @@ const Checkout = () => {
     const [deliveryDetails, setDeliveryDetails] = useState({ hostel: '', block: '', room: '' });
     const [loading, setLoading] = useState(false);
     const [successToken, setSuccessToken] = useState(null);
+    const [showPayment, setShowPayment] = useState(false); // CampusPay toggle
 
     const timeSlots = generateTimeSlots();
+
 
     // Protection: Redirect if cart is empty
     useEffect(() => {
@@ -29,12 +33,18 @@ const Checkout = () => {
 
     if (cart.length === 0 && !successToken) return null;
 
-    const handlePlaceOrder = async () => {
+    const handlePlaceOrderClick = () => {
         if (!timeSlot) return alert('Please select a pickup time slot');
         if (pickupType === 'Delivery' && (!deliveryDetails.hostel || !deliveryDetails.block || !deliveryDetails.room)) {
             return alert('Please fill all delivery details');
         }
+        
+        // Trigger CampusPay Modal instead of instant backend hit
+        setShowPayment(true);
+    };
 
+    const submitOrderToBackend = async () => {
+        setShowPayment(false);
         setLoading(true);
         try {
             const orderPayload = {
@@ -43,6 +53,7 @@ const Checkout = () => {
                 totalAmount: totalAmount + 10, // Including platform fee
                 pickupType,
                 timeSlot,
+                paymentStatus: 'Paid', // Record simulated payment status
                 ...(pickupType === 'Delivery' && { deliveryDetails })
             };
 
@@ -55,6 +66,7 @@ const Checkout = () => {
             setLoading(false);
         }
     };
+
 
     if (successToken) {
         return (
@@ -238,8 +250,8 @@ const Checkout = () => {
                         <button
                             className="btn btn-primary"
                             style={{ width: '100%', padding: '1.1rem', fontSize: '1.1rem', borderRadius: 'var(--radius-lg)' }}
-                            onClick={handlePlaceOrder}
-                            disabled={loading}
+                            onClick={handlePlaceOrderClick}
+                            disabled={loading || showPayment}
                         >
                             {loading ? (
                                 <div className="spinner" style={{ width: '24px', height: '24px' }}></div>
@@ -258,6 +270,15 @@ const Checkout = () => {
                     </div>
                 </div>
             </div>
+
+            {/* CampusPay Simulated Payment Overlay */}
+            {showPayment && (
+                <CampusPayModal 
+                    amount={totalAmount + 10} 
+                    onSuccess={submitOrderToBackend} 
+                    onCancel={() => setShowPayment(false)} 
+                />
+            )}
         </div>
     );
 };
