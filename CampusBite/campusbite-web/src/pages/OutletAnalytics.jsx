@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
-import { IndianRupee, ShoppingBag, Clock, CheckCircle, TrendingUp } from 'lucide-react';
+import { IndianRupee, ShoppingBag, Clock, CheckCircle, TrendingUp, BrainCircuit, AlertTriangle, Lightbulb, CheckCircle2 } from 'lucide-react';
 
 const OutletAnalytics = () => {
     const { state } = useLocation();
@@ -12,13 +12,18 @@ const OutletAnalytics = () => {
     const outletId = state?.outletId;
 
     const [analytics, setAnalytics] = useState(null);
+    const [predictions, setPredictions] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const fetchAnalytics = async () => {
         try {
             setLoading(true);
-            const res = await api.get(`/analytics/outlet/${outletId}`);
-            setAnalytics(res.data);
+            const [resAnalytics, resPredictions] = await Promise.all([
+                api.get(`/analytics/outlet/${outletId}`),
+                api.get(`/analytics/predictions/outlet/${outletId}`)
+            ]);
+            setAnalytics(resAnalytics.data);
+            setPredictions(resPredictions.data.insights);
         } catch (error) {
             console.error("Failed to load analytics");
         } finally {
@@ -105,7 +110,59 @@ const OutletAnalytics = () => {
 
                 </div>
 
+                {/* AI Demand Forecast Section */}
+                {predictions && (
+                    <div style={{ marginBottom: '3rem' }}>
+                        <h3 className="heading-3 flex items-center gap-2" style={{ marginBottom: '1.5rem' }}>
+                            <BrainCircuit size={24} color="#8b5cf6" /> 
+                            <span style={{ background: 'linear-gradient(90deg, #8b5cf6, #ec4899)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: 800 }}>
+                                AI Demand Forecast
+                            </span>
+                        </h3>
+                        <div className="grid md:grid-cols-3 gap-6">
+                            {predictions.map((insight, idx) => {
+                                let icon = <Lightbulb size={24} color="#3b82f6" />;
+                                let color = '#3b82f6';
+                                let bg = 'rgba(59,130,246,0.1)';
+                                
+                                if (insight.type === 'warning') {
+                                    icon = <AlertTriangle size={24} color="#f59e0b" />;
+                                    color = '#f59e0b';
+                                    bg = 'rgba(245,158,11,0.1)';
+                                } else if (insight.type === 'success') {
+                                    icon = <CheckCircle2 size={24} color="#10b981" />;
+                                    color = '#10b981';
+                                    bg = 'rgba(16,185,129,0.1)';
+                                }
+
+                                return (
+                                    <div key={idx} className="card shadow-md animate-slide-up" style={{ 
+                                        animationDelay: `${idx * 0.1}s`, 
+                                        borderTop: `4px solid ${color}`,
+                                        display: 'flex', flexDirection: 'column', padding: '1.5rem'
+                                    }}>
+                                        <div className="flex items-center gap-3" style={{ marginBottom: '1rem' }}>
+                                            <div style={{ background: bg, padding: '0.75rem', borderRadius: '50%' }}>
+                                                {icon}
+                                            </div>
+                                            <h4 style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--dark)' }}>{insight.title}</h4>
+                                        </div>
+                                        <p className="text-muted" style={{ fontSize: '0.95rem', lineHeight: 1.5, marginBottom: '1.5rem', flex: 1 }}>
+                                            {insight.description}
+                                        </p>
+                                        <div style={{ background: 'var(--light)', padding: '1rem', borderRadius: 'var(--radius-md)', borderLeft: `3px solid ${color}` }}>
+                                            <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--dark)' }}>⚡ ACTION:</p>
+                                            <p style={{ fontSize: '0.9rem', color: color, fontWeight: 500, marginTop: '0.25rem' }}>{insight.action}</p>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
+
                 {/* Top Selling Items Section */}
+
                 <h3 className="heading-3 flex items-center gap-2" style={{ marginBottom: '1.5rem' }}>
                     <TrendingUp size={24} color="var(--primary)" /> Top Performing Dishes
                 </h3>
