@@ -74,67 +74,35 @@ const OutletMenuManager = () => {
     const handleGenerateImage = async (e) => {
         e.preventDefault();
         if (!newItem.name) {
-            alert("Please enter an Item Name first to fetch a matching photograph.");
+            alert("Please enter an Item Name first so the AI knows what to generate.");
             return;
         }
         setGeneratingImage(true);
         
         try {
-            // Function to extract image URL from Wikipedia JSON
-            const extractImage = (data) => {
-                if (data && data.query && data.query.pages) {
-                    const ObjectKeys = Object.keys(data.query.pages);
-                    if (ObjectKeys.length > 0) {
-                        const pageId = ObjectKeys[0];
-                        if (data.query.pages[pageId].thumbnail && data.query.pages[pageId].thumbnail.source) {
-                            // Ensure we don't accidentally grab a tiny icon, though pithumbsize=500 helps
-                            return data.query.pages[pageId].thumbnail.source;
-                        }
-                    }
-                }
-                return null;
-            };
-
-            // Using Wikipedia's API for 100% accurate food photos. 
-            // We search the exact term first.
-            let searchTarget = newItem.name.trim();
-            let wikiApiUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(searchTarget)}&gsrlimit=1&prop=pageimages&pithumbsize=500&format=json&origin=*`;
+            // Using a highly stable generative AI cluster to precisely draw exactly what the user describes (bypassing literal Wikipedia searches)
+            const prompt = `Delicious appetizing plate of ${newItem.name}, ${newItem.description || ''}, highly detailed, professional food photography, 4k resolution, restaurant studio lighting, close up`;
             
-            let response = await fetch(wikiApiUrl);
-            let data = await response.json();
-            let imageUrl = extractImage(data);
+            const aiImageUrl = `https://api.airforce/v1/imagine?prompt=${encodeURIComponent(prompt)}`;
             
-            // If the user typed a super complex name (e.g. "Adrak and Elachi wali Chai") and it has no Wikipedia exact match
-            // We strip it down to just the very last word ("Chai") which is usually the root dish noun, and search again!
-            if (!imageUrl && searchTarget.includes(' ')) {
-                const words = searchTarget.split(' ');
-                searchTarget = words[words.length - 1]; // Grab the last noun
-                wikiApiUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(searchTarget)}&gsrlimit=1&prop=pageimages&pithumbsize=500&format=json&origin=*`;
-                response = await fetch(wikiApiUrl);
-                data = await response.json();
-                imageUrl = extractImage(data);
-            }
-            
-            // Ultra-reliable dynamic fallback if even the root noun fails
+            // Ultra-reliable dynamic fallback if the AI cluster happens to be overloaded at the exact moment of request
             const fallbackUrl = `https://placehold.co/400x300/ff5a5f/ffffff?text=${encodeURIComponent(newItem.name)}`;
             
-            const finalImageToUse = imageUrl || fallbackUrl;
-            
-            // Preload the image in browser background so the spinner spins until the image physically finishes rendering
+            // Preload the image in browser background so the spinner spins until the AI physically finishes rendering
             const img = new Image();
-            img.src = finalImageToUse;
+            img.src = aiImageUrl;
             img.onload = () => {
-                setNewItem(prev => ({ ...prev, image: finalImageToUse }));
+                setNewItem(prev => ({ ...prev, image: aiImageUrl }));
                 setGeneratingImage(false);
             };
             img.onerror = () => {
+                 console.warn("Primary AI is currently dropping packets. Dropping to UI fallback.");
                  setNewItem(prev => ({ ...prev, image: fallbackUrl }));
                  setGeneratingImage(false);
             }
         } catch (error) {
             console.error(error);
             setGeneratingImage(false);
-            alert("Network error while communicating with Wikipedia.");
         }
     };
 
@@ -198,7 +166,7 @@ const OutletMenuManager = () => {
                                             ✕
                                         </button>
                                         <div style={{ position: 'absolute', bottom: '0.5rem', left: '0.5rem', background: 'rgba(0,0,0,0.6)', color: 'white', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 600 }}>
-                                            AUTO PHOTO
+                                            AI GENERATED
                                         </div>
                                     </div>
                                 ) : (
@@ -211,7 +179,7 @@ const OutletMenuManager = () => {
                                         </button>
 
                                         <button type="button" className="btn btn-outline" disabled={generatingImage} onClick={handleGenerateImage} style={{ whiteSpace: 'nowrap', display: 'flex', gap: '0.4rem', alignItems: 'center', padding: '0.5rem 1rem' }}>
-                                            {generatingImage ? <span className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px', borderColor: 'rgba(0,0,0,0.1)', borderTopColor: 'var(--primary)' }}></span> : '🪄 Auto Photo'}
+                                            {generatingImage ? <span className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px', borderColor: 'rgba(0,0,0,0.1)', borderTopColor: 'var(--primary)' }}></span> : '🪄 AI Magic'}
                                         </button>
                                     </div>
                                 )}
