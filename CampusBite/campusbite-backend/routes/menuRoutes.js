@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { getMenuItemsByOutlet, createMenuItem, updateMenuItem, deleteMenuItem } = require('../controllers/menuController');
+const { getMenuItemsByOutlet, createMenuItem, updateMenuItem, deleteMenuItem, upload, uploadImage } = require('../controllers/menuController');
 const { protect, authorize } = require('../middleware/authMiddleware');
+
+// Route for manually uploading food photography directly to the server filesystem
+router.post('/upload', protect, authorize('outlet'), upload.single('image'), uploadImage);
 
 router.route('/outlet/:outletId')
     .get(getMenuItemsByOutlet);

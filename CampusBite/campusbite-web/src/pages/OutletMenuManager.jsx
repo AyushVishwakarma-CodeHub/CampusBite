@@ -17,6 +17,7 @@ const OutletMenuManager = () => {
     // Quick Add format state
     const [newItem, setNewItem] = useState({ name: '', price: '', description: '', isAvailable: true, image: '' });
     const [generatingImage, setGeneratingImage] = useState(false);
+    const [uploadingImage, setUploadingImage] = useState(false);
 
     useEffect(() => {
         if (!user || user.role !== 'outlet') navigate('/');
@@ -44,6 +45,29 @@ const OutletMenuManager = () => {
         } catch (error) {
             console.error(error);
             alert("Failed to add Item");
+        }
+    };
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        setUploadingImage(true);
+        try {
+            const res = await api.post('/menu/upload', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            setNewItem(prev => ({ ...prev, image: res.data.imageUrl }));
+        } catch (error) {
+            console.error("Upload error:", error);
+            alert("Failed to upload image. Please ensure it is less than 5MB and a valid image format.");
+        } finally {
+            setUploadingImage(false);
+            // Reset input so they can upload the exact same file again if they delete and retry
+            e.target.value = null; 
         }
     };
 
@@ -147,9 +171,15 @@ const OutletMenuManager = () => {
                                     </div>
                                 ) : (
                                     <div className="flex gap-2">
-                                        <input type="text" className="input-control" style={{ flex: 1 }} placeholder="Image URL..." value={newItem.image || ''} onChange={e => setNewItem({ ...newItem, image: e.target.value })} />
-                                        <button type="button" className="btn btn-outline" disabled={generatingImage} onClick={handleGenerateImage} style={{ whiteSpace: 'nowrap', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                            {generatingImage ? <span className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px', borderColor: 'rgba(0,0,0,0.1)', borderTopColor: 'var(--primary)' }}></span> : '🪄 AI Magic'}
+                                        <input type="text" className="input-control" style={{ flex: 1 }} placeholder="URL, photo, or AI..." value={newItem.image || ''} onChange={e => setNewItem({ ...newItem, image: e.target.value })} />
+                                        
+                                        <input type="file" id="imageUpload" accept="image/*" style={{ display: 'none' }} onChange={handleImageUpload} />
+                                        <button type="button" className="btn btn-outline" disabled={uploadingImage} onClick={() => document.getElementById('imageUpload').click()} style={{ whiteSpace: 'nowrap', display: 'flex', gap: '0.4rem', alignItems: 'center', padding: '0.5rem 1rem' }}>
+                                            {uploadingImage ? <span className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px', borderColor: 'rgba(0,0,0,0.1)', borderTopColor: 'var(--primary)' }}></span> : '📁 Upload'}
+                                        </button>
+
+                                        <button type="button" className="btn btn-outline" disabled={generatingImage} onClick={handleGenerateImage} style={{ whiteSpace: 'nowrap', display: 'flex', gap: '0.4rem', alignItems: 'center', padding: '0.5rem 1rem' }}>
+                                            {generatingImage ? <span className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px', borderColor: 'rgba(0,0,0,0.1)', borderTopColor: 'var(--primary)' }}></span> : '🪄 AI'}
                                         </button>
                                     </div>
                                 )}
