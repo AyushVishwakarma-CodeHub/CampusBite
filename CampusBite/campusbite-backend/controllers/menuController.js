@@ -2,6 +2,8 @@ const MenuItem = require('../models/MenuItem');
 const Outlet = require('../models/Outlet');
 const multer = require('multer');
 const path = require('path');
+const axios = require('axios');
+const fs = require('fs');
 
 // Set up storage engine
 const storage = multer.diskStorage({
@@ -30,6 +32,42 @@ const uploadImage = async (req, res) => {
     } catch (error) {
         console.error("Upload error:", error);
         res.status(500).json({ message: 'Failed to upload image' });
+    }
+};
+
+const axios = require('axios');
+const fs = require('fs');
+
+// Generate AI Image and proxy write it to disk to bypass CORS / Hotlink protections
+const generateAiImage = async (req, res) => {
+    try {
+        const { prompt } = req.body;
+        if (!prompt) return res.status(400).json({ message: "Prompt is required." });
+
+        const aiUrl = `https://api.airforce/v1/imagine?prompt=${encodeURIComponent(prompt)}`;
+        
+        // Fetch raw image buffer natively from Node (bypassing Client browser CORS blocks entirely)
+        const response = await axios({
+            url: aiUrl,
+            method: 'GET',
+            responseType: 'arraybuffer'
+        });
+
+        // Use the same robust storage pattern as Multer disk storage
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const filename = `ai-gen-${uniqueSuffix}.jpg`;
+        const filepath = path.join(__dirname, '../public/images', filename);
+
+        // Dump binary stream into public/images physically
+        fs.writeFileSync(filepath, response.data);
+
+        // Send back standard local API map URL
+        const baseUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
+        res.status(200).json({ imageUrl: `${baseUrl}/public/images/${filename}` });
+
+    } catch (error) {
+        console.error("AI Proxy Generation Error:", error.message);
+        res.status(500).json({ message: "Failed to generate physical image from AI" });
     }
 };
 
@@ -98,8 +136,8 @@ const deleteMenuItem = async (req, res) => {
         await menuItem.deleteOne();
         res.json({ message: 'Menu item removed' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
-module.exports = { getMenuItemsByOutlet, createMenuItem, updateMenuItem, deleteMenuItem, upload, uploadImage };
+module.exports = { getMenuItemsByOutlet, createMenuItem, updateMenuItem, deleteMenuItem, upload, uploadImage, generateAiImage };
