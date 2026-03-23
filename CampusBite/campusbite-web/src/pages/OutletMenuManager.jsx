@@ -61,6 +61,9 @@ const OutletMenuManager = () => {
             const uniqueSeed = Math.floor(Math.random() * 1000000);
             const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=400&height=300&nologo=true&seed=${uniqueSeed}`;
             
+            // Ultra-reliable dynamic fallback if the AI server is overloaded
+            const fallbackUrl = `https://placehold.co/400x300/ff5a5f/ffffff?text=${encodeURIComponent(newItem.name)}`;
+            
             // Preload the image in browser background so the spinner spins until the AI physically finishes rendering
             const img = new Image();
             img.src = imageUrl;
@@ -69,7 +72,8 @@ const OutletMenuManager = () => {
                 setGeneratingImage(false);
             };
             img.onerror = () => {
-                 alert("AI Generation failed. The server might be overloaded. Please try again.");
+                 console.warn("Primary AI API is overloaded or down. Dropping to graphical fallback.");
+                 setNewItem(prev => ({ ...prev, image: fallbackUrl }));
                  setGeneratingImage(false);
             }
         } catch (error) {
