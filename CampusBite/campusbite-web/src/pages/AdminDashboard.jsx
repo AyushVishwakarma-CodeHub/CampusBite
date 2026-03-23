@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
-import { Activity, Users, Store, DollarSign, TrendingUp, CheckCircle, XCircle, Clock, PlusCircle, Network } from 'lucide-react';
+import { Activity, Users, Store, DollarSign, TrendingUp, CheckCircle, XCircle, Clock, PlusCircle, Network, Inbox } from 'lucide-react';
 
 const AdminDashboard = () => {
     const { user } = useAuth();
@@ -11,6 +11,7 @@ const AdminDashboard = () => {
     const [analytics, setAnalytics] = useState(null);
     const [pendingOutlets, setPendingOutlets] = useState([]);
     const [activeOutlets, setActiveOutlets] = useState([]);
+    const [partnerRequests, setPartnerRequests] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const [newOutlet, setNewOutlet] = useState({ ownerName: '', email: '', password: '', outletName: '', location: '' });
@@ -21,14 +22,16 @@ const AdminDashboard = () => {
 
         const fetchData = async () => {
             try {
-                const [analyticsRes, pendingRes, activeRes] = await Promise.all([
+                const [analyticsRes, pendingRes, activeRes, partnerRes] = await Promise.all([
                     api.get('/admin/analytics'),
                     api.get('/outlets/admin/pending'),
-                    api.get('/outlets')
+                    api.get('/outlets'),
+                    api.get('/partner-requests')
                 ]);
                 setAnalytics(analyticsRes.data);
                 setPendingOutlets(pendingRes.data);
                 setActiveOutlets(activeRes.data);
+                setPartnerRequests(partnerRes.data);
             } catch (error) {
                 console.error("Failed to load admin data");
             } finally {
@@ -48,6 +51,15 @@ const AdminDashboard = () => {
             }
         } catch (error) {
             alert("Failed to update approval status");
+        }
+    };
+
+    const handleMarkRequestReviewed = async (id) => {
+        try {
+            await api.put(`/partner-requests/${id}/status`, { status: 'Reviewed' });
+            setPartnerRequests(prev => prev.map(r => r._id === id ? { ...r, status: 'Reviewed' } : r));
+        } catch (error) {
+            alert("Failed to update status");
         }
     };
 
@@ -258,6 +270,56 @@ const AdminDashboard = () => {
                         )}
                     </div>
                 </div>
+
+                {/* Partnership Inquiry Inbox */}
+                <div className="card shadow-sm" style={{ marginTop: '3rem' }}>
+                    <div className="flex justify-between items-center" style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
+                        <div className="flex items-center gap-3">
+                            <Inbox size={24} color="var(--primary)" />
+                            <h3 className="heading-3">Partnership Inquiry Inbox</h3>
+                        </div>
+                        <div className="badge badge-warning" style={{ fontSize: '0.8rem' }}>
+                            {partnerRequests.filter(r => r.status === 'Pending').length} Pending Leads
+                        </div>
+                    </div>
+
+                    {partnerRequests.length === 0 ? (
+                        <div className="text-center text-muted" style={{ padding: '3rem 0' }}>No partnership inquiries yet. Inbox zero! 🎉</div>
+                    ) : (
+                        <div className="flex flex-col gap-4">
+                            {partnerRequests.map(req => (
+                                <div key={req._id} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4" style={{ padding: '1.5rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', background: req.status === 'Pending' ? '#fff9f0' : 'var(--light)' }}>
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2" style={{ marginBottom: '0.5rem' }}>
+                                            <h4 style={{ fontWeight: 600, fontSize: '1.1rem' }}>{req.outletName}</h4>
+                                            {req.status === 'Pending' ? (
+                                                <span className="badge badge-warning" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>NEW LEAD</span>
+                                            ) : (
+                                                <span className="badge text-muted" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem', background: 'var(--gray)' }}>REVIEWED</span>
+                                            )}
+                                        </div>
+                                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 text-sm text-muted">
+                                            <p><strong>Owner:</strong> {req.name}</p>
+                                            <p><strong>Email:</strong> {req.email}</p>
+                                            <p><strong>Phone:</strong> {req.phone}</p>
+                                            <p><strong>Location:</strong> {req.location}</p>
+                                        </div>
+                                    </div>
+                                    {req.status === 'Pending' && (
+                                        <button 
+                                            className="btn btn-outline"
+                                            style={{ color: 'var(--primary)', borderColor: 'var(--primary)' }}
+                                            onClick={() => handleMarkRequestReviewed(req._id)}
+                                        >
+                                            Mark as Contacted
+                                        </button>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
             </div>
         </>
     );

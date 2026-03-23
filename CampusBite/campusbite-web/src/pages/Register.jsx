@@ -51,10 +51,12 @@ const Register = () => {
                     </div>
                     <div className="input-group">
                         <label>I am a...</label>
-                        <select name="role" className="input-control" value={formData.role} onChange={handleChange}>
+                        <select name="role" className="input-control" value={formData.role} onChange={handleChange} disabled>
                             <option value="student">Student</option>
-                            <option value="outlet">Food Outlet Owner</option>
                         </select>
+                        <p style={{ fontSize: '0.75rem', marginTop: '0.5rem', color: 'var(--gray)' }}>
+                            Are you a Cafeteria Owner? <Link to="/partner" style={{ color: 'var(--primary)', fontWeight: '600' }}>Partner with us.</Link>
+                        </p>
                     </div>
 
                     <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>

@@ -63,7 +63,7 @@ app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/feedback', require('./routes/feedbackRoutes'));
 app.use('/api/analytics', require('./routes/analyticsRoutes'));
-
+app.use('/api/partner-requests', require('./routes/partnerRequestRoutes'));
 
 // Temporary admin route to update images
 const Outlet = require('./models/Outlet');
