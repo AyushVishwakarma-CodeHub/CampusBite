@@ -25,7 +25,7 @@ const OutletMenu = () => {
                 setOutlet(outletRes.data);
 
                 const menuRes = await api.get(`/menu/outlet/${outletId}`);
-                setMenuItems(menuRes.data.filter(item => item.isAvailable));
+                setMenuItems(menuRes.data);
             } catch (error) {
                 console.error("Error fetching menu", error);
             } finally {
@@ -85,7 +85,13 @@ const OutletMenu = () => {
                     <div style={{ flex: '1 1 65%' }}>
                         <div className="grid grid-cols-1 gap-4">
                             {menuItems.map(item => (
-                                <div key={item._id} className="card hoverable-card flex justify-between items-center" style={{ padding: '1.25rem' }}>
+                                <div key={item._id} className="card flex justify-between items-center" style={{ 
+                                    padding: '1.25rem', 
+                                    opacity: item.isAvailable ? 1 : 0.6,
+                                    filter: item.isAvailable ? 'none' : 'grayscale(0.6)',
+                                    transition: 'all 0.3s ease',
+                                    border: item.isAvailable ? '1px solid var(--border)' : '1px dashed var(--gray)'
+                                }}>
                                     <div className="flex gap-4 items-center">
                                         <div style={{ width: '85px', height: '85px', borderRadius: 'var(--radius-md)', overflow: 'hidden', background: 'var(--border)' }}>
                                             {item.image ? (
@@ -95,17 +101,22 @@ const OutletMenu = () => {
                                             )}
                                         </div>
                                         <div>
-                                            <h3 className="heading-3" style={{ fontSize: '1.15rem' }}>{item.name}</h3>
+                                            <h3 className="heading-3" style={{ fontSize: '1.15rem' }}>
+                                                {item.name} 
+                                                {!item.isAvailable && <span className="badge" style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', marginLeft: '0.5rem', fontSize: '0.65rem' }}>OUT OF STOCK</span>}
+                                            </h3>
                                             <p className="text-muted" style={{ fontSize: '0.85rem', marginBottom: '0.5rem', maxWidth: '300px' }}>{item.description}</p>
                                             <div className="flex items-center gap-2">
-                                                <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '1.1rem' }}>₹{item.price}</span>
+                                                <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '1.1rem', textDecoration: !item.isAvailable ? 'line-through' : 'none' }}>₹{item.price}</span>
                                                 {item.isVeg && <span className="badge badge-success" style={{ fontSize: '0.65rem' }}>VEG</span>}
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="flex items-center gap-3">
-                                        {getQuantity(item._id) > 0 ? (
+                                        {!item.isAvailable ? (
+                                            <span style={{ fontWeight: 800, color: 'var(--danger)', fontSize: '0.85rem', letterSpacing: '0.05em' }}>SOLD OUT</span>
+                                        ) : getQuantity(item._id) > 0 ? (
                                             <div className="flex items-center gap-3 bg-light" style={{ padding: '0.4rem', borderRadius: 'var(--radius-full)', background: 'var(--border)' }}>
                                                 <button className="btn btn-outline" style={{ width: '32px', height: '32px', padding: 0, borderRadius: '50%' }} onClick={() => removeFromCart(item._id)}><Minus size={14} /></button>
                                                 <span style={{ fontWeight: 700, minWidth: '20px', textAlign: 'center' }}>{getQuantity(item._id)}</span>

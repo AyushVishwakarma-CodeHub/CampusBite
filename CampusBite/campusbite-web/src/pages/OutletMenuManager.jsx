@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
-import { Plus, Edit2, Trash2 } from 'lucide-react';
+import { Plus, Edit2, Trash2, EyeOff, Eye } from 'lucide-react';
 
 const OutletMenuManager = () => {
     const { state } = useLocation();
@@ -120,11 +120,19 @@ const OutletMenuManager = () => {
                                     </div>
 
                                     <div className="flex flex-col gap-2">
-                                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem' }} onClick={() => toggleAvailability(item._id, item.isAvailable)}>
-                                            Toggle Stock
+                                        <button 
+                                            className="btn" 
+                                            style={{ 
+                                                background: item.isAvailable ? 'rgba(245, 158, 11, 0.1)' : 'rgba(16, 185, 129, 0.1)', 
+                                                color: item.isAvailable ? 'var(--warning, #f59e0b)' : 'var(--success, #10b981)', 
+                                                padding: '0.4rem 0.75rem', fontSize: '0.8rem', display: 'flex', gap: '0.4rem', alignItems: 'center' 
+                                            }} 
+                                            onClick={() => toggleAvailability(item._id, item.isAvailable)}
+                                        >
+                                            {item.isAvailable ? <><EyeOff size={14}/> Mark Out Of Stock</> : <><Eye size={14}/> Mark Available</>}
                                         </button>
-                                        <button className="btn" style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', padding: '0.25rem 0.5rem', fontSize: '0.8rem' }} onClick={() => deleteItem(item._id)}>
-                                            Delete
+                                        <button className="btn" style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', padding: '0.4rem 0.75rem', fontSize: '0.8rem', display: 'flex', gap: '0.4rem', alignItems: 'center' }} onClick={() => deleteItem(item._id)}>
+                                            <Trash2 size={14} /> Delete
                                         </button>
                                     </div>
                                 </div>
