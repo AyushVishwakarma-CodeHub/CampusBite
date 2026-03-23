@@ -80,28 +80,43 @@ const OutletMenuManager = () => {
         setGeneratingImage(true);
         
         try {
-            // Using a highly reliable Photography CDN to fetch an actual high-quality photo of the food instead of relying on overloaded AI servers
-            const uniqueSeed = Math.floor(Math.random() * 10000);
-            const imageUrl = `https://loremflickr.com/400/300/${encodeURIComponent(newItem.name)},food/all?lock=${uniqueSeed}`;
+            // Using Wikipedia's API to fetch 100% accurate, real encyclopedic food photos. Eliminates irrelevant stock photos and failing AI APIs.
+            const wikiApiUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(newItem.name + " food cuisine")}&gsrlimit=1&prop=pageimages&pithumbsize=500&format=json&origin=*`;
             
-            // Ultra-reliable dynamic fallback if the stock server is also overloaded
+            const response = await fetch(wikiApiUrl);
+            const data = await response.json();
+            
+            let imageUrl = null;
+            if (data && data.query && data.query.pages) {
+                const ObjectKeys = Object.keys(data.query.pages);
+                if (ObjectKeys.length > 0) {
+                    const pageId = ObjectKeys[0];
+                    if (data.query.pages[pageId].thumbnail && data.query.pages[pageId].thumbnail.source) {
+                        imageUrl = data.query.pages[pageId].thumbnail.source;
+                    }
+                }
+            }
+            
+            // Ultra-reliable dynamic fallback if Wikipedia does not have a picture of this extremely specific item
             const fallbackUrl = `https://placehold.co/400x300/ff5a5f/ffffff?text=${encodeURIComponent(newItem.name)}`;
+            
+            const finalImageToUse = imageUrl || fallbackUrl;
             
             // Preload the image in browser background so the spinner spins until the image physically finishes rendering
             const img = new Image();
-            img.src = imageUrl;
+            img.src = finalImageToUse;
             img.onload = () => {
-                setNewItem(prev => ({ ...prev, image: imageUrl }));
+                setNewItem(prev => ({ ...prev, image: finalImageToUse }));
                 setGeneratingImage(false);
             };
             img.onerror = () => {
-                 console.warn("Primary photography API is overloaded or down. Dropping to graphical fallback.");
                  setNewItem(prev => ({ ...prev, image: fallbackUrl }));
                  setGeneratingImage(false);
             }
         } catch (error) {
             console.error(error);
             setGeneratingImage(false);
+            alert("Network error while communicating with Wikipedia.");
         }
     };
 
