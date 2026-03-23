@@ -80,24 +80,42 @@ const OutletMenuManager = () => {
         setGeneratingImage(true);
         
         try {
-            // Using Wikipedia's API to fetch 100% accurate, real encyclopedic food photos. Eliminates irrelevant stock photos and failing AI APIs.
-            const wikiApiUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(newItem.name + " food cuisine")}&gsrlimit=1&prop=pageimages&pithumbsize=500&format=json&origin=*`;
-            
-            const response = await fetch(wikiApiUrl);
-            const data = await response.json();
-            
-            let imageUrl = null;
-            if (data && data.query && data.query.pages) {
-                const ObjectKeys = Object.keys(data.query.pages);
-                if (ObjectKeys.length > 0) {
-                    const pageId = ObjectKeys[0];
-                    if (data.query.pages[pageId].thumbnail && data.query.pages[pageId].thumbnail.source) {
-                        imageUrl = data.query.pages[pageId].thumbnail.source;
+            // Function to extract image URL from Wikipedia JSON
+            const extractImage = (data) => {
+                if (data && data.query && data.query.pages) {
+                    const ObjectKeys = Object.keys(data.query.pages);
+                    if (ObjectKeys.length > 0) {
+                        const pageId = ObjectKeys[0];
+                        if (data.query.pages[pageId].thumbnail && data.query.pages[pageId].thumbnail.source) {
+                            // Ensure we don't accidentally grab a tiny icon, though pithumbsize=500 helps
+                            return data.query.pages[pageId].thumbnail.source;
+                        }
                     }
                 }
+                return null;
+            };
+
+            // Using Wikipedia's API for 100% accurate food photos. 
+            // We search the exact term first.
+            let searchTarget = newItem.name.trim();
+            let wikiApiUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(searchTarget)}&gsrlimit=1&prop=pageimages&pithumbsize=500&format=json&origin=*`;
+            
+            let response = await fetch(wikiApiUrl);
+            let data = await response.json();
+            let imageUrl = extractImage(data);
+            
+            // If the user typed a super complex name (e.g. "Adrak and Elachi wali Chai") and it has no Wikipedia exact match
+            // We strip it down to just the very last word ("Chai") which is usually the root dish noun, and search again!
+            if (!imageUrl && searchTarget.includes(' ')) {
+                const words = searchTarget.split(' ');
+                searchTarget = words[words.length - 1]; // Grab the last noun
+                wikiApiUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(searchTarget)}&gsrlimit=1&prop=pageimages&pithumbsize=500&format=json&origin=*`;
+                response = await fetch(wikiApiUrl);
+                data = await response.json();
+                imageUrl = extractImage(data);
             }
             
-            // Ultra-reliable dynamic fallback if Wikipedia does not have a picture of this extremely specific item
+            // Ultra-reliable dynamic fallback if even the root noun fails
             const fallbackUrl = `https://placehold.co/400x300/ff5a5f/ffffff?text=${encodeURIComponent(newItem.name)}`;
             
             const finalImageToUse = imageUrl || fallbackUrl;
