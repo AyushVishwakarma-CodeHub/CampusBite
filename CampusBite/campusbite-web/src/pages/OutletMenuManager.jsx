@@ -166,7 +166,7 @@ const OutletMenuManager = () => {
                                             ✕
                                         </button>
                                         <div style={{ position: 'absolute', bottom: '0.5rem', left: '0.5rem', background: 'rgba(0,0,0,0.6)', color: 'white', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 600 }}>
-                                            AI GENERATED
+                                            SMART PHOTO
                                         </div>
                                     </div>
                                 ) : (
@@ -179,7 +179,7 @@ const OutletMenuManager = () => {
                                         </button>
 
                                         <button type="button" className="btn btn-outline" disabled={generatingImage} onClick={handleGenerateImage} style={{ whiteSpace: 'nowrap', display: 'flex', gap: '0.4rem', alignItems: 'center', padding: '0.5rem 1rem' }}>
-                                            {generatingImage ? <span className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px', borderColor: 'rgba(0,0,0,0.1)', borderTopColor: 'var(--primary)' }}></span> : '🪄 AI Magic'}
+                                            {generatingImage ? <span className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px', borderColor: 'rgba(0,0,0,0.1)', borderTopColor: 'var(--primary)' }}></span> : '🪄 Smart Photo'}
                                         </button>
                                     </div>
                                 )}
