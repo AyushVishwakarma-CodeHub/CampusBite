@@ -2,7 +2,7 @@ const Order = require('../models/Order');
 const User = require('../models/User');
 const Outlet = require('../models/Outlet');
 const axios = require('axios');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 // Get total platform analytics
 const getAdminAnalytics = async (req, res) => {
