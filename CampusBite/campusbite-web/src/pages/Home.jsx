@@ -311,6 +311,20 @@ const Home = () => {
                 </Link>
             </section>
 
+            {/* ──────────────── PARTNERSHIP CTA ──────────────── */}
+            <section style={{ background: 'var(--light)', padding: '5rem 1rem', textAlign: 'center' }}>
+                <div className="container" style={{ maxWidth: '600px' }}>
+                    <div className="badge badge-success" style={{ marginBottom: '1rem', display: 'inline-block' }}>BUSINESS PARTNERSHIPS</div>
+                    <h2 className="heading-2" style={{ marginBottom: '1rem' }}>Run a Campus Cafeteria?</h2>
+                    <p className="text-muted" style={{ marginBottom: '2rem', fontSize: '1.1rem', lineHeight: 1.6 }}>
+                        Partner with CampusBite to digitize your menu, eliminate chaotic physical queues, and boost your sales with our AI forecasting engine.
+                    </p>
+                    <Link to="/partner" className="btn btn-outline" style={{ padding: '0.9rem 2.2rem', fontSize: '1.05rem', fontWeight: 600, color: 'var(--primary)', borderColor: 'var(--primary)' }}>
+                        Partner with CampusBite
+                    </Link>
+                </div>
+            </section>
+
             {/* ──────────────── FOOTER ──────────────── */}
             <footer style={{ background: 'var(--dark)', color: 'rgba(255,255,255,0.7)', padding: '3rem 1rem', textAlign: 'center', fontSize: '0.9rem' }}>
                 <div className="container flex flex-col items-center gap-4">
