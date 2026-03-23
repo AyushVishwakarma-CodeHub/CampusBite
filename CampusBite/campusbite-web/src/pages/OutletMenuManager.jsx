@@ -80,7 +80,6 @@ const OutletMenuManager = () => {
         setGeneratingImage(true);
         
         try {
-            // Function to extract image URL from Wikipedia JSON
             const extractImage = (data) => {
                 if (data && data.query && data.query.pages) {
                     const ObjectKeys = Object.keys(data.query.pages);
@@ -94,31 +93,43 @@ const OutletMenuManager = () => {
                 return null;
             };
 
-            // Using Wikipedia's API for 100% accurate food photos. 
-            // We search the exact term first.
+            // Localization Dictionary: Translates generic Western nouns to localized Indian dishes for better Encyclopedia matching
+            const localizationMap = {
+                "tea": "Masala chai",
+                "chai": "Masala chai",
+                "coffee": "Indian filter coffee",
+                "water": "Mineral water bottle",
+                "rice": "Basmati rice bowl",
+                "bread": "Roti flatbread",
+                "burger": "Veggie burger",
+                "pizza": "Paneer pizza"
+            };
+
             let searchTarget = newItem.name.trim();
+            const lowerName = searchTarget.toLowerCase();
+            
+            if (localizationMap[lowerName]) {
+                searchTarget = localizationMap[lowerName];
+            }
+
             let wikiApiUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(searchTarget)}&gsrlimit=1&prop=pageimages&pithumbsize=500&format=json&origin=*`;
             
             let response = await fetch(wikiApiUrl);
             let data = await response.json();
             let imageUrl = extractImage(data);
             
-            // If Wikipedia exact match fails, strip it down to just the very last word ("Chai") which is usually the root dish noun.
             if (!imageUrl && searchTarget.includes(' ')) {
                 const words = searchTarget.split(' ');
-                searchTarget = words[words.length - 1]; // Grab the last noun
+                searchTarget = words[words.length - 1]; 
                 wikiApiUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(searchTarget)}&gsrlimit=1&prop=pageimages&pithumbsize=500&format=json&origin=*`;
                 response = await fetch(wikiApiUrl);
                 data = await response.json();
                 imageUrl = extractImage(data);
             }
             
-            // Ultra-reliable dynamic fallback if even the root noun fails
             const fallbackUrl = `https://placehold.co/400x300/ff5a5f/ffffff?text=${encodeURIComponent(newItem.name)}`;
-            
             const finalImageToUse = imageUrl || fallbackUrl;
             
-            // Preload the image in browser background so the spinner spins until the image physically finishes rendering
             const img = new Image();
             img.src = finalImageToUse;
             img.onload = () => {
