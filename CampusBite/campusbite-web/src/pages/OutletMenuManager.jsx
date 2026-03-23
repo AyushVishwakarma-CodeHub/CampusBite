@@ -51,9 +51,11 @@ const OutletMenuManager = () => {
             const res = await api.put(`/menu/${id}`, { isAvailable: !currentStatus });
             setMenuItems(prev => prev.map(m => m._id === id ? res.data : m));
         } catch (error) {
-            console.error(error);
+            console.error("Toggle Error:", error);
+            alert("Failed to toggle item availability: " + (error.response?.data?.message || "Server Error"));
         }
     };
+
 
     const deleteItem = async (id) => {
         if (window.confirm("Are you sure?")) {
@@ -119,18 +121,28 @@ const OutletMenuManager = () => {
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col gap-2">
-                                        <button 
-                                            className="btn" 
-                                            style={{ 
-                                                background: item.isAvailable ? 'rgba(245, 158, 11, 0.1)' : 'rgba(16, 185, 129, 0.1)', 
-                                                color: item.isAvailable ? 'var(--warning, #f59e0b)' : 'var(--success, #10b981)', 
-                                                padding: '0.4rem 0.75rem', fontSize: '0.8rem', display: 'flex', gap: '0.4rem', alignItems: 'center' 
-                                            }} 
-                                            onClick={() => toggleAvailability(item._id, item.isAvailable)}
-                                        >
-                                            {item.isAvailable ? <><EyeOff size={14}/> Mark Out Of Stock</> : <><Eye size={14}/> Mark Available</>}
-                                        </button>
+                                    <div className="flex flex-col gap-3 items-end">
+                                        
+                                        {/* Beautiful Custom Toggle Switch */}
+                                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
+                                            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: item.isAvailable ? 'var(--dark)' : 'var(--muted)' }}>
+                                                {item.isAvailable ? 'In Stock' : 'Out of Stock'}
+                                            </span>
+                                            <div 
+                                                onClick={() => toggleAvailability(item._id, item.isAvailable)}
+                                                style={{ 
+                                                    width: '44px', height: '24px', background: item.isAvailable ? 'var(--success)' : 'var(--gray)', 
+                                                    borderRadius: '12px', position: 'relative', transition: 'background 0.3s ease' 
+                                                }}
+                                            >
+                                                <div style={{ 
+                                                    width: '20px', height: '20px', background: 'white', borderRadius: '50%', 
+                                                    position: 'absolute', top: '2px', left: item.isAvailable ? '22px' : '2px', 
+                                                    transition: 'left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' 
+                                                }} />
+                                            </div>
+                                        </label>
+
                                         <button className="btn" style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', padding: '0.4rem 0.75rem', fontSize: '0.8rem', display: 'flex', gap: '0.4rem', alignItems: 'center' }} onClick={() => deleteItem(item._id)}>
                                             <Trash2 size={14} /> Delete
                                         </button>
