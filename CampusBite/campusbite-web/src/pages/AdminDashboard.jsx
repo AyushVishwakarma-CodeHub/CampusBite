@@ -3,26 +3,32 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
-import { Activity, Users, Store, DollarSign, TrendingUp, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Activity, Users, Store, DollarSign, TrendingUp, CheckCircle, XCircle, Clock, PlusCircle, Network } from 'lucide-react';
 
 const AdminDashboard = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [analytics, setAnalytics] = useState(null);
     const [pendingOutlets, setPendingOutlets] = useState([]);
+    const [activeOutlets, setActiveOutlets] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const [newOutlet, setNewOutlet] = useState({ ownerName: '', email: '', password: '', outletName: '', location: '' });
+    const [creationLoading, setCreationLoading] = useState(false);
 
     useEffect(() => {
         if (!user || user.role !== 'admin') navigate('/');
 
         const fetchData = async () => {
             try {
-                const [analyticsRes, pendingRes] = await Promise.all([
+                const [analyticsRes, pendingRes, activeRes] = await Promise.all([
                     api.get('/admin/analytics'),
                     api.get('/outlets/admin/pending'),
+                    api.get('/outlets')
                 ]);
                 setAnalytics(analyticsRes.data);
                 setPendingOutlets(pendingRes.data);
+                setActiveOutlets(activeRes.data);
             } catch (error) {
                 console.error("Failed to load admin data");
             } finally {
@@ -36,8 +42,32 @@ const AdminDashboard = () => {
         try {
             await api.put(`/outlets/${outletId}/approve`, { approve });
             setPendingOutlets(prev => prev.filter(o => o._id !== outletId));
+            if (approve) {
+                const updatedActive = await api.get('/outlets');
+                setActiveOutlets(updatedActive.data);
+            }
         } catch (error) {
             alert("Failed to update approval status");
+        }
+    };
+
+    const handleCreateOutlet = async (e) => {
+        e.preventDefault();
+        setCreationLoading(true);
+        try {
+            const res = await api.post('/admin/create-outlet', newOutlet);
+            alert("Secure Franchise Created Successfully!");
+            setNewOutlet({ ownerName: '', email: '', password: '', outletName: '', location: '' });
+            // Refresh active outlets
+            const updatedActive = await api.get('/outlets');
+            setActiveOutlets(updatedActive.data);
+            
+            // Optionally update KPI metrics locally
+            if(analytics) setAnalytics({...analytics, totalOutlets: analytics.totalOutlets + 1});
+        } catch (error) {
+            alert("Creation failed: " + (error.response?.data?.message || error.message));
+        } finally {
+            setCreationLoading(false);
         }
     };
 
@@ -145,6 +175,85 @@ const AdminDashboard = () => {
                         ) : (
                             <div style={{ background: 'white', padding: '1rem', borderRadius: 'var(--radius-md)' }}>
                                 No prediction data currently available.
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Franchise Creation Terminal & Network Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" style={{ marginTop: '3rem' }}>
+                    
+                    {/* Creation Terminal */}
+                    <div className="card shadow-lg" style={{ borderTop: '4px solid var(--primary)' }}>
+                        <div className="flex items-center gap-3" style={{ marginBottom: '1.5rem' }}>
+                            <PlusCircle size={24} color="var(--primary)" />
+                            <h3 className="heading-3">Franchise Creation Terminal</h3>
+                        </div>
+                        <p className="text-muted" style={{ marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+                            Securely generate a new Outlet owner account login bound dynamically to a physical campus outlet. Let's grow the CampusBite network.
+                        </p>
+                        <form onSubmit={handleCreateOutlet} className="flex flex-col gap-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="input-group" style={{ marginBottom: 0 }}>
+                                    <label style={{ fontSize: '0.8rem' }}>Owner Full Name</label>
+                                    <input type="text" className="input-control" value={newOutlet.ownerName} onChange={e => setNewOutlet({...newOutlet, ownerName: e.target.value})} required placeholder="John Doe" />
+                                </div>
+                                <div className="input-group" style={{ marginBottom: 0 }}>
+                                    <label style={{ fontSize: '0.8rem' }}>Login Email</label>
+                                    <input type="email" className="input-control" value={newOutlet.email} onChange={e => setNewOutlet({...newOutlet, email: e.target.value})} required placeholder="owner@campusbite.com" />
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="input-group" style={{ marginBottom: 0 }}>
+                                    <label style={{ fontSize: '0.8rem' }}>Secure Login Password</label>
+                                    <input type="password" className="input-control" value={newOutlet.password} onChange={e => setNewOutlet({...newOutlet, password: e.target.value})} required placeholder="Password" minLength="6" />
+                                </div>
+                                <div className="input-group" style={{ marginBottom: 0 }}>
+                                    <label style={{ fontSize: '0.8rem' }}>Physical Location</label>
+                                    <input type="text" className="input-control" value={newOutlet.location} onChange={e => setNewOutlet({...newOutlet, location: e.target.value})} required placeholder="North Block Canteen" />
+                                </div>
+                            </div>
+
+                            <div className="input-group">
+                                <label style={{ fontSize: '0.8rem' }}>Outlet Name / Branding</label>
+                                <input type="text" className="input-control" value={newOutlet.outletName} onChange={e => setNewOutlet({...newOutlet, outletName: e.target.value})} required placeholder="Bite Bistro" />
+                            </div>
+
+                            <button type="submit" className="btn btn-primary" disabled={creationLoading} style={{ marginTop: '0.5rem', padding: '0.75rem', fontSize: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+                                {creationLoading ? <span className="spinner" style={{ width: '20px', height: '20px' }}></span> : <><Store size={18} /> Spawn Franchise</>}
+                            </button>
+                        </form>
+                    </div>
+
+                    {/* Live Operating Network */}
+                    <div className="card shadow-sm" style={{ maxHeight: '600px', overflowY: 'auto' }}>
+                        <div className="flex items-center gap-3" style={{ marginBottom: '1.5rem', position: 'sticky', top: 0, background: 'white', paddingBottom: '1rem', borderBottom: '1px solid var(--border)', zIndex: 10 }}>
+                            <Network size={24} color="var(--secondary)" />
+                            <div>
+                                <h3 className="heading-3">Global Operating Network</h3>
+                                <p className="text-muted" style={{ fontSize: '0.8rem' }}>{activeOutlets.length} Active Franchisees</p>
+                            </div>
+                        </div>
+
+                        {activeOutlets.length === 0 ? (
+                            <div className="text-center text-muted" style={{ padding: '3rem 0' }}>No active outlets in network.</div>
+                        ) : (
+                            <div className="flex flex-col gap-3">
+                                {activeOutlets.map(out => (
+                                    <div key={out._id} className="flex justify-between items-center" style={{ padding: '1rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', background: 'var(--light)' }}>
+                                        <div className="flex items-center gap-3">
+                                            <div style={{ width: '40px', height: '40px', background: 'var(--secondary)', color: 'white', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                                                {out.name.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <h4 style={{ fontWeight: 600, fontSize: '0.95rem' }}>{out.name}</h4>
+                                                <p className="text-muted" style={{ fontSize: '0.75rem' }}>📍 {out.location || 'Campus'}</p>
+                                            </div>
+                                        </div>
+                                        <div className="badge badge-success" style={{ fontSize: '0.7rem' }}>LIVE</div>
+                                    </div>
+                                ))}
                             </div>
                         )}
                     </div>
