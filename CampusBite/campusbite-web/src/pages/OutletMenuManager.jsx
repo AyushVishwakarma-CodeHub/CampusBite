@@ -74,35 +74,66 @@ const OutletMenuManager = () => {
     const handleGenerateImage = async (e) => {
         e.preventDefault();
         if (!newItem.name) {
-            alert("Please enter an Item Name first so the AI knows what to generate.");
+            alert("Please enter an Item Name first to fetch a smart photograph.");
             return;
         }
         setGeneratingImage(true);
         
         try {
-            // Using a highly stable generative AI cluster to precisely draw exactly what the user describes (bypassing literal Wikipedia searches)
-            const prompt = `Delicious appetizing plate of ${newItem.name}, ${newItem.description || ''}, highly detailed, professional food photography, 4k resolution, restaurant studio lighting, close up`;
+            // Function to extract image URL from Wikipedia JSON
+            const extractImage = (data) => {
+                if (data && data.query && data.query.pages) {
+                    const ObjectKeys = Object.keys(data.query.pages);
+                    if (ObjectKeys.length > 0) {
+                        const pageId = ObjectKeys[0];
+                        if (data.query.pages[pageId].thumbnail && data.query.pages[pageId].thumbnail.source) {
+                            return data.query.pages[pageId].thumbnail.source;
+                        }
+                    }
+                }
+                return null;
+            };
+
+            // Using Wikipedia's API for 100% accurate food photos. 
+            // We search the exact term first.
+            let searchTarget = newItem.name.trim();
+            let wikiApiUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(searchTarget)}&gsrlimit=1&prop=pageimages&pithumbsize=500&format=json&origin=*`;
             
-            const aiImageUrl = `https://api.airforce/v1/imagine?prompt=${encodeURIComponent(prompt)}`;
+            let response = await fetch(wikiApiUrl);
+            let data = await response.json();
+            let imageUrl = extractImage(data);
             
-            // Ultra-reliable dynamic fallback if the AI cluster happens to be overloaded at the exact moment of request
+            // If Wikipedia exact match fails, strip it down to just the very last word ("Chai") which is usually the root dish noun.
+            if (!imageUrl && searchTarget.includes(' ')) {
+                const words = searchTarget.split(' ');
+                searchTarget = words[words.length - 1]; // Grab the last noun
+                wikiApiUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(searchTarget)}&gsrlimit=1&prop=pageimages&pithumbsize=500&format=json&origin=*`;
+                response = await fetch(wikiApiUrl);
+                data = await response.json();
+                imageUrl = extractImage(data);
+            }
+            
+            // Ultra-reliable dynamic fallback if even the root noun fails
             const fallbackUrl = `https://placehold.co/400x300/ff5a5f/ffffff?text=${encodeURIComponent(newItem.name)}`;
             
-            // Preload the image in browser background so the spinner spins until the AI physically finishes rendering
+            const finalImageToUse = imageUrl || fallbackUrl;
+            
+            // Preload the image in browser background so the spinner spins until the image physically finishes rendering
             const img = new Image();
-            img.src = aiImageUrl;
+            img.src = finalImageToUse;
             img.onload = () => {
-                setNewItem(prev => ({ ...prev, image: aiImageUrl }));
+                setNewItem(prev => ({ ...prev, image: finalImageToUse }));
                 setGeneratingImage(false);
             };
             img.onerror = () => {
-                 console.warn("Primary AI is currently dropping packets. Dropping to UI fallback.");
                  setNewItem(prev => ({ ...prev, image: fallbackUrl }));
                  setGeneratingImage(false);
             }
         } catch (error) {
             console.error(error);
             setGeneratingImage(false);
+            const fallbackUrl = `https://placehold.co/400x300/ff5a5f/ffffff?text=${encodeURIComponent(newItem.name)}`;
+            setNewItem(prev => ({ ...prev, image: fallbackUrl }));
         }
     };
 
