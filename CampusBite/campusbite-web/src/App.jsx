@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { SocketProvider } from './context/SocketContext';
 import { Toaster } from 'react-hot-toast';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Pages
@@ -30,8 +31,11 @@ import OutletAnalytics from './pages/OutletAnalytics';
 // Admin
 import AdminDashboard from './pages/AdminDashboard';
 
+const GOOGLE_CLIENT_ID = '97895982317-dhj7futvs3c080c83pd5c53e89i6nbct.apps.googleusercontent.com';
+
 function App() {
   return (
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
     <AuthProvider>
       <SocketProvider>
         <CartProvider>
@@ -72,6 +76,7 @@ function App() {
         </CartProvider>
       </SocketProvider>
     </AuthProvider>
+    </GoogleOAuthProvider>
 
   );
 }

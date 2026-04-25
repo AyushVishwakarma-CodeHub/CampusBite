@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const axios = require('axios');
+const { OAuth2Client } = require('google-auth-library');
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const generateToken = (id, role) => {
     return jwt.sign({ id, role }, process.env.JWT_SECRET, {
         expiresIn: '30d',
@@ -52,12 +54,22 @@ const loginUser = async (req, res) => {
     try {
         const user = await User.findOne({ email });
 
-        if (user && (await bcrypt.compare(password, user.password_hash))) {
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        // If user signed up via Google and has no password set
+        if (!user.password_hash) {
+            return res.status(401).json({ message: 'This account uses Google Sign-In. Please use the Google button to log in.' });
+        }
+
+        if (await bcrypt.compare(password, user.password_hash)) {
             res.json({
                 _id: user._id,
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                avatar: user.avatar,
                 token: generateToken(user._id, user.role),
             });
         } else {
@@ -219,4 +231,52 @@ const resetPassword = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, loginUser, getMe, forgotPassword, resetPassword };
+const googleLogin = async (req, res) => {
+    const { credential } = req.body;
+
+    try {
+        // Verify the Google id_token server-side
+        const ticket = await googleClient.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        const { sub: googleId, email, name, picture } = payload;
+
+        // Check if user already exists
+        let user = await User.findOne({ email });
+
+        if (user) {
+            // Link Google account if not already linked
+            if (!user.googleId) {
+                user.googleId = googleId;
+                user.avatar = picture;
+                await user.save();
+            }
+        } else {
+            // Auto-register as student
+            user = await User.create({
+                name,
+                email,
+                googleId,
+                avatar: picture,
+                role: 'student',
+            });
+        }
+
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            avatar: user.avatar,
+            token: generateToken(user._id, user.role),
+        });
+    } catch (error) {
+        console.error('Google Auth Error:', error);
+        res.status(401).json({ message: 'Invalid Google token' });
+    }
+};
+
+module.exports = { registerUser, loginUser, getMe, forgotPassword, resetPassword, googleLogin };
