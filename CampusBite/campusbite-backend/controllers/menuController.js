@@ -35,9 +35,6 @@ const uploadImage = async (req, res) => {
     }
 };
 
-const axios = require('axios');
-const fs = require('fs');
-
 // Generate AI Image and proxy write it to disk to bypass CORS / Hotlink protections
 const generateAiImage = async (req, res) => {
     try {
