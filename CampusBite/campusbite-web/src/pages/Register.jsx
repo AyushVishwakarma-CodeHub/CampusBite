@@ -59,11 +59,11 @@ const Register = () => {
                     </div>
                     <div className="input-group">
                         <label>Email Address</label>
-                        <input type="email" name="email" className="input-control" value={formData.email} onChange={handleChange} required />
+                        <input type="email" name="email" className="input-control" value={formData.email} onChange={handleChange} autoComplete="off" required />
                     </div>
                     <div className="input-group">
                         <label>Password</label>
-                        <input type="password" name="password" className="input-control" value={formData.password} onChange={handleChange} minLength="6" required />
+                        <input type="password" name="password" className="input-control" value={formData.password} onChange={handleChange} autoComplete="new-password" minLength="6" required />
                     </div>
                     <div className="input-group">
                         <label>I am a...</label>
