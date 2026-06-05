@@ -530,6 +530,7 @@ const Home = () => {
                         {[
                             { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ayushraj2908' },
                             { label: 'GitHub', href: 'https://github.com/AyushVishwakarma-CodeHub/' },
+                            { label: 'Website', href: 'https://ayushrajvishwakarma.in' },
                             { label: 'Contact', href: 'mailto:ayushthesweetdabang@gmail.com' },
                         ].map((link, i) => (
                             <a key={i} href={link.href} target="_blank" rel="noreferrer" style={{
