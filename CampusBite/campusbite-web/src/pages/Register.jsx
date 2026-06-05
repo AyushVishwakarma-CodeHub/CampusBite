@@ -65,14 +65,17 @@ const Register = () => {
                         <label>Password</label>
                         <input type="password" name="password" className="input-control" value={formData.password} onChange={handleChange} autoComplete="new-password" minLength="6" required />
                     </div>
-                    <div className="input-group">
-                        <label>I am a...</label>
-                        <select name="role" className="input-control" value={formData.role} onChange={handleChange} disabled>
-                            <option value="student">Student</option>
-                        </select>
-                        <p style={{ fontSize: '0.75rem', marginTop: '0.5rem', color: 'var(--gray)' }}>
-                            Are you a Cafeteria Owner? <Link to="/partner" style={{ color: 'var(--primary)', fontWeight: '600' }}>Partner with us.</Link>
-                        </p>
+                    <div style={{ 
+                        background: 'rgba(0,166,153,0.06)', 
+                        border: '1px solid rgba(0,166,153,0.15)', 
+                        borderRadius: '10px', 
+                        padding: '0.75rem 1rem', 
+                        marginBottom: '0.5rem',
+                        fontSize: '0.88rem',
+                        color: 'var(--gray)',
+                        textAlign: 'center',
+                    }}>
+                        🎓 Registering as a <strong style={{ color: 'var(--dark)' }}>Student</strong> · Are you a Cafeteria Owner? <Link to="/partner" style={{ color: 'var(--primary)', fontWeight: 600 }}>Partner with us</Link>
                     </div>
 
                     <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>
