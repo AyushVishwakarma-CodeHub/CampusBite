@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext';
 import Navbar from '../components/Navbar';
 import api from '../api';
 import { generateTimeSlots } from '../utils/timeSlots';
-import { CreditCard, CheckCircle2, ChevronRight, MapPin, Clock as ClockIcon, Info, ShoppingBag, Zap } from 'lucide-react';
+import { CreditCard, CheckCircle2, ChevronRight, MapPin, Clock as ClockIcon, Info, ShoppingBag, Zap, Timer } from 'lucide-react';
 import CampusPayModal from '../components/CampusPayModal';
 
 const Checkout = () => {
@@ -34,7 +34,7 @@ const Checkout = () => {
     if (cart.length === 0 && !successToken) return null;
 
     const handlePlaceOrderClick = () => {
-        if (!timeSlot) return alert('Please select a pickup time slot');
+        if (pickupType !== 'OrderNow' && !timeSlot) return alert('Please select a pickup time slot');
         if (pickupType === 'Delivery' && (!deliveryDetails.hostel || !deliveryDetails.block || !deliveryDetails.room)) {
             return alert('Please fill all delivery details');
         }
@@ -51,8 +51,8 @@ const Checkout = () => {
                 outletId: activeOutlet._id,
                 items: cart.map(c => ({ menuItem: c.menuItem._id, quantity: c.quantity, price: c.price })),
                 totalAmount: totalAmount + 10, // Including platform fee
-                pickupType,
-                timeSlot,
+                pickupType: pickupType === 'OrderNow' ? 'Takeaway' : pickupType,
+                timeSlot: pickupType === 'OrderNow' ? 'ASAP - Order Now' : timeSlot,
                 paymentStatus: 'Paid', // Record simulated payment status
                 ...(pickupType === 'Delivery' && { deliveryDetails })
             };
@@ -133,33 +133,118 @@ const Checkout = () => {
                             <h3 className="heading-3">1. How will you get your food?</h3>
                         </div>
 
-                        <div className="flex gap-4">
-                            <label
-                                onClick={() => setPickupType('Takeaway')}
-                                className={`card flex-1 cursor-pointer items-center justify-center flex-col gap-2 ${pickupType === 'Takeaway' ? 'border-primary' : ''}`}
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(3, 1fr)',
+                            gap: '1rem',
+                        }}>
+                            {/* Order Now */}
+                            <div
+                                onClick={() => { setPickupType('OrderNow'); setTimeSlot(''); }}
                                 style={{
-                                    transition: 'var(--transition)',
-                                    border: pickupType === 'Takeaway' ? '2px solid var(--primary)' : '1.5px solid var(--border)',
-                                    background: pickupType === 'Takeaway' ? 'rgba(255,90,95,0.02)' : 'white'
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.75rem',
+                                    padding: '1.75rem 1rem',
+                                    borderRadius: '1rem',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.25s ease',
+                                    border: pickupType === 'OrderNow' ? '2px solid #10b981' : '1.5px solid var(--border)',
+                                    background: pickupType === 'OrderNow' ? 'rgba(16,185,129,0.04)' : 'white',
+                                    boxShadow: pickupType === 'OrderNow' ? '0 4px 15px rgba(16,185,129,0.15)' : 'none',
                                 }}
                             >
-                                <ShoppingBag size={24} color={pickupType === 'Takeaway' ? 'var(--primary)' : 'var(--gray)'} />
-                                <span className="font-bold">Takeaway</span>
-                            </label>
+                                <div style={{
+                                    width: '52px', height: '52px', borderRadius: '14px',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    background: pickupType === 'OrderNow' ? 'rgba(16,185,129,0.12)' : 'var(--light)',
+                                }}>
+                                    <Timer size={24} color={pickupType === 'OrderNow' ? '#10b981' : 'var(--gray)'} />
+                                </div>
+                                <span style={{ fontWeight: 700, fontSize: '0.95rem', color: pickupType === 'OrderNow' ? '#10b981' : 'var(--dark)' }}>Order Now</span>
+                                <span style={{ fontSize: '0.72rem', color: 'var(--gray)', lineHeight: 1.3, textAlign: 'center' }}>ASAP Pickup</span>
+                            </div>
 
-                            <label
-                                onClick={() => setPickupType('Delivery')}
-                                className={`card flex-1 cursor-pointer items-center justify-center flex-col gap-2 ${pickupType === 'Delivery' ? 'border-primary' : ''}`}
+                            {/* Takeaway */}
+                            <div
+                                onClick={() => setPickupType('Takeaway')}
                                 style={{
-                                    transition: 'var(--transition)',
-                                    border: pickupType === 'Delivery' ? '2px solid var(--primary)' : '1.5px solid var(--border)',
-                                    background: pickupType === 'Delivery' ? 'rgba(255,90,95,0.02)' : 'white'
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.75rem',
+                                    padding: '1.75rem 1rem',
+                                    borderRadius: '1rem',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.25s ease',
+                                    border: pickupType === 'Takeaway' ? '2px solid var(--primary)' : '1.5px solid var(--border)',
+                                    background: pickupType === 'Takeaway' ? 'rgba(255,90,95,0.03)' : 'white',
+                                    boxShadow: pickupType === 'Takeaway' ? '0 4px 15px rgba(255,90,95,0.15)' : 'none',
                                 }}
                             >
-                                <Zap size={24} color={pickupType === 'Delivery' ? 'var(--primary)' : 'var(--gray)'} />
-                                <span className="font-bold">Fast Delivery</span>
-                            </label>
+                                <div style={{
+                                    width: '52px', height: '52px', borderRadius: '14px',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    background: pickupType === 'Takeaway' ? 'rgba(255,90,95,0.1)' : 'var(--light)',
+                                }}>
+                                    <ShoppingBag size={24} color={pickupType === 'Takeaway' ? 'var(--primary)' : 'var(--gray)'} />
+                                </div>
+                                <span style={{ fontWeight: 700, fontSize: '0.95rem', color: pickupType === 'Takeaway' ? 'var(--primary)' : 'var(--dark)' }}>Takeaway</span>
+                                <span style={{ fontSize: '0.72rem', color: 'var(--gray)', lineHeight: 1.3, textAlign: 'center' }}>Pick a Slot</span>
+                            </div>
+
+                            {/* Delivery */}
+                            <div
+                                onClick={() => setPickupType('Delivery')}
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.75rem',
+                                    padding: '1.75rem 1rem',
+                                    borderRadius: '1rem',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.25s ease',
+                                    border: pickupType === 'Delivery' ? '2px solid var(--primary)' : '1.5px solid var(--border)',
+                                    background: pickupType === 'Delivery' ? 'rgba(255,90,95,0.03)' : 'white',
+                                    boxShadow: pickupType === 'Delivery' ? '0 4px 15px rgba(255,90,95,0.15)' : 'none',
+                                }}
+                            >
+                                <div style={{
+                                    width: '52px', height: '52px', borderRadius: '14px',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    background: pickupType === 'Delivery' ? 'rgba(255,90,95,0.1)' : 'var(--light)',
+                                }}>
+                                    <Zap size={24} color={pickupType === 'Delivery' ? 'var(--primary)' : 'var(--gray)'} />
+                                </div>
+                                <span style={{ fontWeight: 700, fontSize: '0.95rem', color: pickupType === 'Delivery' ? 'var(--primary)' : 'var(--dark)' }}>Fast Delivery</span>
+                                <span style={{ fontSize: '0.72rem', color: 'var(--gray)', lineHeight: 1.3, textAlign: 'center' }}>To Your Door</span>
+                            </div>
                         </div>
+
+                        {/* Order Now info banner */}
+                        {pickupType === 'OrderNow' && (
+                            <div className="animate-slide-up" style={{
+                                marginTop: '1.5rem',
+                                background: 'rgba(16,185,129,0.06)',
+                                border: '1px solid rgba(16,185,129,0.2)',
+                                borderRadius: 'var(--radius-lg)',
+                                padding: '1.25rem 1.5rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                            }}>
+                                <Timer size={20} color="var(--success)" />
+                                <div>
+                                    <p className="font-semibold" style={{ color: 'var(--success)', marginBottom: '0.15rem' }}>⚡ Instant Order</p>
+                                    <p className="text-sm text-muted">Your order will be sent to the kitchen immediately. Head to the counter when your token is ready!</p>
+                                </div>
+                            </div>
+                        )}
 
                         {pickupType === 'Delivery' && (
                             <div className="animate-slide-up" style={{ marginTop: '2rem', background: 'var(--light)', padding: '2rem', borderRadius: 'var(--radius-lg)', border: '1px dotted var(--border)' }}>
@@ -182,7 +267,8 @@ const Checkout = () => {
                         )}
                     </div>
 
-                    {/* Step 2: Time Slot */}
+                    {/* Step 2: Time Slot (hidden for Order Now) */}
+                    {pickupType !== 'OrderNow' && (
                     <div className="card shadow-sm" style={{ padding: '2rem' }}>
                         <div className="flex items-center gap-3" style={{ marginBottom: '1rem' }}>
                             <ClockIcon size={24} color="var(--primary)" />
@@ -206,6 +292,7 @@ const Checkout = () => {
                             ))}
                         </div>
                     </div>
+                    )}
                 </div>
 
                 {/* Right: Summary */}
